@@ -67,18 +67,14 @@ public class Homework2_2 {
 		System.out.println("Arrays.sort comparator = [height] : data");
 		Arrays.sort(data , new Comparator <PhyscData>() {
 			public int compare (PhyscData p1, PhyscData p2) {
-				int p1height = p1.height;
-				int p2height = p2.height;
-				return Integer.compare(p1height, p2height);
+				return Integer.compare(p1.height, p2.height);
 			}
 		});//comparator가 필요하다 
 		showData(data);
 		System.out.println("Arrays.sort comparator = [vision] : data");
 		Arrays.sort(data , new Comparator <PhyscData>() {
 			public int compare (PhyscData p1, PhyscData p2) {
-				double p1vision = p1.vision;
-				double p2vision = p2.vision;
-				return Double.compare(p1vision, p2vision);
+				return Double.compare(p1.vision, p2.vision);
 			}
 		});//comparator가 필요하다 
 		showData(data);

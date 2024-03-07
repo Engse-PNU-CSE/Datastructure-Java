@@ -27,10 +27,12 @@ class PhyscData2 implements Comparable<PhyscData2>{
 	}
 	@Override
 	public int compareTo(PhyscData2 p) {
-		
+		if(name.compareTo(p.name) > 0) return 1;
+		else if(name.compareTo(p.name) < 0) return -1;
+		return 0;
 	}
 	public int equals(PhyscData2 p) {
-		
+		return -1;
 	}
 }
 public class train3_6_1BinarySearchforObjectArrangement {
@@ -39,6 +41,29 @@ public class train3_6_1BinarySearchforObjectArrangement {
 		for(PhyscData2 person : p) {
 			person.toString();
 		}
+	}
+	static void sortData(PhyscData2[] data) {
+		for(int i = 0; i < data.length; i++) {
+			for(int j = i + 1; j < data.length; j++) {
+				if(data[i].compareTo(data[j]) > 0) {
+					swap(data, i, j);
+				}
+			}
+		}
+	}
+	static void swap(PhyscData2[] arr, int ind1, int ind2) {
+		PhyscData2 temp = arr[ind1];
+		arr[ind1] = arr[ind2];
+		arr[ind2] = temp;
+	}
+	static int linearSearch(PhyscData2[] data, PhyscData2 key) {
+		return -1;
+	}
+	static int binarySearch(PhyscData2[] data, PhyscData2 key) {
+		return -1;
+	}
+	static void reverse(PhyscData2[] data) {
+		
 	}
 	public static void main(String[] args) {
 		PhyscData2[] data = {

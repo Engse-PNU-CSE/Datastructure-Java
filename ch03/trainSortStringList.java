@@ -2,7 +2,9 @@ package datastructure.ch03;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class trainSortStringList {
@@ -69,10 +71,11 @@ public class trainSortStringList {
 		    String cities[] = new String[0];
 		    cities = list.toArray(cities);
 		    for(int i = 0 ; i< cities.length; i++) {
-		    	if(binarySearch(str, item) > 0) {
-		    		
-		    	}
 		    }
+		    Set<String> set = new HashSet<String>(list);
+		 // Set to List
+		    list = new ArrayList<String>(set);
+		    cities = list.toArray(cities);
 		    return cities;
 	    }
 		public static void main(String[] args) {

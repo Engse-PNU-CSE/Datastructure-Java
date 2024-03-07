@@ -9,6 +9,15 @@ class Fruit4 {
 
 
 
+	public Fruit4(String name, int price, String expire) {
+		this.name = name;
+		this.price = price;
+		this.expire = expire;
+	}
+	@Override
+	public String toString() {
+		return "Fruit4 [name=" + name + ", price=" + price + ", expire=" + expire + "]";
+	}
 	public int getPrice() {
 		return price;
 	}
@@ -22,7 +31,8 @@ class FruitNameComparator2 implements Comparator<Fruit4>{
 
 
 	}
-public class Test_실습3_7객체배열이진탐색 {
+}
+public class HW3_2_BinarySearchObjectArray {
 
 	private static void sortData(Fruit4[] arr, Comparator<Fruit4> cc_price) {
 

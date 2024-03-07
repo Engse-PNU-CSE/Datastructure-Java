@@ -5,13 +5,26 @@ import java.util.List;
 
 public class HW3_1_MergeStringArray {
 	static void showList(String topic, String[] list) {
-
+		System.out.println(topic);
+		for(String str : list) System.out.print(str + " ");
+		System.out.println();
 	}
 
 	static String[] mergeList(String[] s1, String[] s2) {
 		int i = 0, j = 0, k = 0;
 		String[] s3 = new String[10];
-
+		System.out.println(s3.length);
+		while(k < s3.length) {
+			if(s1[i].compareTo(s2[j]) < 0) {
+				s3[k]=s1[i];
+				i++;
+			}
+			else {
+				s3[k]=s2[j];
+				j++;
+			}
+			k++;
+		}
 		return s3;
 	}
 

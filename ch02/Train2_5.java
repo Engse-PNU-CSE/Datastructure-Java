@@ -49,7 +49,6 @@ public class Train2_5 {
 		for(int i = 0; i < a.length/2; i++) {
 			swap(a, i, a.length - i - 1);
 		}
-
 	}
 	static void reverseSort(int []arr) {
 		for(int i = 0 ; i < arr.length; i++) {
