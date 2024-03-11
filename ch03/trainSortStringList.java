@@ -11,9 +11,9 @@ import java.util.Set;
 public class trainSortStringList {
 
 	    public static String[] removeElement1(String[] arr, String item) {
-	    	List<String> str1 = new ArrayList<String>(arr);
+	    	List<String> str1 = new ArrayList<>(Arrays.asList(arr));
 	    	int count = Collections.frequency(str1, item);
-	    	for(int i =0; i < count-1; i++) str1.remove(item);
+	    	for(int i = 1; i < count; i++) str1.remove(item);
 	    	return str1.toArray(new String[0]);
 	    }
 	    static int binarySearch(String[]item, String key) {
@@ -57,17 +57,17 @@ public class trainSortStringList {
 	    }
 	    
 	    static String[] removeDuplicateList(List<String> list) {
-		    Set<String> set = new HashSet<String>(list);
-		    List<String> list1 = new ArrayList<String>(set);
-		    String[] cities = list1.toArray(new String[0]);
-		    
+//		    Set<String> set = new HashSet<String>(list);
+//		    List<String> list1 = new ArrayList<String>(set);
+//		    String[] cities = list1.toArray(new String[0]);
+//		    list to set, set to list method
 		    String[] cities1 = list.toArray(new String[0]);
 		    int count = 0;
 		    while(count < cities1.length) {
 		    	cities1 = removeElement1(cities1, cities1[count++]);
 		    	
 		    }
-		    return cities;
+		    return cities1;
 	    }
 		public static void main(String[] args) {
 			ArrayList<String> list = new ArrayList<>();
