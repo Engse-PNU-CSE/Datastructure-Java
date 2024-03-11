@@ -13,8 +13,7 @@ public class HW3_1_MergeStringArray {
 	static String[] mergeList(String[] s1, String[] s2) {
 		int i = 0, j = 0, k = 0;
 		String[] s3 = new String[10];
-		System.out.println(s3.length);
-		while(k < s3.length) {
+		while(k < s3.length ) {
 			if(s1[i].compareTo(s2[j]) < 0) {
 				s3[k]=s1[i];
 				i++;
