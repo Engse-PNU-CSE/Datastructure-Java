@@ -6,24 +6,20 @@ import java.util.List;
 public class HW3_1_MergeStringArray {
 	static void showList(String topic, String[] list) {
 		System.out.println(topic);
-		for(String str : list) System.out.print(str + " ");
+		for (String str : list)
+			System.out.print(str + " ");
 		System.out.println();
 	}
 
 	static String[] mergeList(String[] s1, String[] s2) {
 		int i = 0, j = 0, k = 0;
-		String[] s3 = new String[10];
-		while(k < s3.length ) {
-			if(s1[i].compareTo(s2[j]) < 0) {
-				s3[k]=s1[i];
-				i++;
-			}
-			else {
-				s3[k]=s2[j];
-				j++;
-			}
-			k++;
+		String[] s3 = new String[s1.length + s2.length];
+		while(i < s1.length && j < s2.length) {
+			if (s1[i].compareTo(s2[j]) <= 0) s3[k++] = s1[i++];
+			else s3[k++] = s2[j++];
 		}
+		while(i < s1.length) s3[k++] = s1[i++];
+		while(j < s2.length) s3[k++] = s2[j++];
 		return s3;
 	}
 

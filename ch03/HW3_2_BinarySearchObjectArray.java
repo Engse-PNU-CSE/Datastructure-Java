@@ -29,16 +29,26 @@ class Fruit4 {
 class FruitNameComparator2 implements Comparator<Fruit4>{
 	public int compare(Fruit4 f1, Fruit4 f2) {
 
-
+		return f1.price-f2.price;
 	}
 }
+
 public class HW3_2_BinarySearchObjectArray {
 
 	private static void sortData(Fruit4[] arr, Comparator<Fruit4> cc_price) {
-
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = i+1; j < arr.length; j++) {
+				if (cc_price.compare(arr[i],arr[j]) > 0) swap(arr, i, j);
+			}
+		}
 	}
 	static void swap(Fruit4[]arr, int ind1, int ind2) {
 		Fruit4 temp = arr[ind1]; arr[ind1] = arr[ind2]; arr[ind2] = temp;
+	}
+	static void reverse(Fruit4[] arr) {//교재 67페이지
+		for(int i = 0; i < arr.length/2; i++) {
+			swap(arr, i, arr.length - i - 1);
+		}
 	}
 	static void sortData(Fruit4 []arr, FruitNameComparator2 cc) {
 		for (int i = 0; i < arr.length; i++) {
@@ -46,7 +56,22 @@ public class HW3_2_BinarySearchObjectArray {
 				if (cc.compare(arr[i],arr[j])> 0) swap(arr, i, j);
 		}
 	}
-
+	static void showData(String msg, Fruit4 []arr) {
+		System.out.println(msg);
+		for(Fruit4 v : arr) System.out.println(v.toString());
+	}
+	static int binarySearch(Fruit4[] arr, Fruit4 key, Comparator<Fruit4> cc) {
+		int pl = 0;
+		int pr = arr.length-1;
+		
+		while(pr>=pl) {
+			int pm = (pl + pr) / 2;
+			if(cc.compare(key, arr[pm]) == 0) return pm;
+			else if(cc.compare(key, arr[pm]) > 0) pl = pm + 1;
+			else if(cc.compare(key, arr[pm]) < 0) pr = pm - 1;
+		}
+		return -1;
+	}
 	public static void main(String[] args) {
 
 		Fruit4[] arr = {new Fruit4("사과", 200, "2023-5-8"), 
@@ -86,7 +111,7 @@ public class HW3_2_BinarySearchObjectArray {
 			}
 		});
 		System.out.println("\ncomparator 정렬(이름)후 객체 배열: ");
-		showData("comparator 객체를 사용한 정렬:", arr);
+		showData("comparator 객체를 사용한 정렬(이름):", arr);
 	
 		Comparator<Fruit4> cc_name = new Comparator<Fruit4>() {// 익명클래스 사용
 
@@ -97,6 +122,8 @@ public class HW3_2_BinarySearchObjectArray {
 			}
 
 		};
+		Arrays.sort(arr, cc_name);
+		showData("comparator 객체를 사용한 정렬 후(이름)::", arr);
 		Comparator<Fruit4> cc_price = new Comparator<Fruit4>() {
 
 			@Override
@@ -118,7 +145,7 @@ public class HW3_2_BinarySearchObjectArray {
 
 		sortData(arr, cc_price);
 		System.out.println("\ncomparator 정렬(가격)후 객체 배열: ");
-		showData("comparator를 사용한 정렬후:", arr);
+		showData("comparator를 사용한 정렬(가격):", arr);
 		
 		result3Index = Arrays.binarySearch(arr, newFruit4, cc_price);
 		System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);

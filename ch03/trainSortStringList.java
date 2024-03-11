@@ -2,6 +2,7 @@ package datastructure.ch03;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,11 +11,9 @@ import java.util.Set;
 public class trainSortStringList {
 
 	    public static String[] removeElement1(String[] arr, String item) {
-	    	List<String> str1 = new ArrayList<String>();
-	    	while(str1.contains(item)) {
-	    		str1.remove(item);
-	    	}
-	    	str1 = Arrays.asList(arr);
+	    	List<String> str1 = new ArrayList<String>(arr);
+	    	int count = Collections.frequency(str1, item);
+	    	for(int i =0; i < count-1; i++) str1.remove(item);
 	    	return str1.toArray(new String[0]);
 	    }
 	    static int binarySearch(String[]item, String key) {
@@ -54,28 +53,20 @@ public class trainSortStringList {
 	    }
 	    
 	    static void sortList(List<String> list) {
-	    	list.sort(null);
-//	    	String cities[] = new String[0];
-//		    cities = list.toArray(cities);
-//	    	
-//	    	for(int i = 0 ; i < cities.length; i++) {
-//				for(int j = i+1; j < cities.length; j++) {
-//					if(cities[i].compareTo(cities[j]) > 0) {
-//						swap(cities, i, j);
-//					}
-//				}
-//			}
+	    	Collections.sort(list);
 	    }
 	    
 	    static String[] removeDuplicateList(List<String> list) {
-		    String cities[] = new String[0];
-		    cities = list.toArray(cities);
-		    for(int i = 0 ; i< cities.length; i++) {
-		    }
 		    Set<String> set = new HashSet<String>(list);
-		 // Set to List
-		    list = new ArrayList<String>(set);
-		    cities = list.toArray(cities);
+		    List<String> list1 = new ArrayList<String>(set);
+		    String[] cities = list1.toArray(new String[0]);
+		    
+		    String[] cities1 = list.toArray(new String[0]);
+		    int count = 0;
+		    while(count < cities1.length) {
+		    	cities1 = removeElement1(cities1, cities1[count++]);
+		    	
+		    }
 		    return cities;
 	    }
 		public static void main(String[] args) {

@@ -10,8 +10,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class HW3_3_MergeUncomplicatedList {
 //string 정렬, binary search 구현
@@ -22,21 +24,52 @@ public class HW3_3_MergeUncomplicatedList {
 
 	static ArrayList<String> removeDuplicate(ArrayList<String> al) {
 		//구현할 부분 : 리스트에서 중복을 제거한다, 정렬후 호출하는 것을 전제로 구현
-
-
+		Set<String> removeDuplicateA1 = new HashSet<>(al);
+		ArrayList<String> list1 = new ArrayList<>(removeDuplicateA1);
+		Collections.sort(list1);
 		return list1;
 	}
 	
 	static void trimSpace(String[]arr) {
-		
+		for(String str : arr) {
+			str = str.trim();
+		}
 	}
 	static void makeList(String[] sarray1, List<String>list1) {
-		
+		for(String sarray : sarray1) list1.add(sarray);
 	}
 	
 	static List<String> mergeList(List<String> list1, List<String> list2) {
 		ArrayList<String> list3 = new ArrayList<>();
+		list3.addAll(list1);
+		list3.addAll(list2);
 		
+		Set<String> removeDuplicateA1 = new HashSet<>(list3);
+		ArrayList<String> list4 = new ArrayList<>(removeDuplicateA1);
+		Collections.sort(list4);
+		return list4;
+	}
+	static void showData(String msg, String []arr) {
+		System.out.println(msg);
+		for(String v : arr) System.out.print(v + " ");
+		System.out.println();
+	}
+	static void showList(String msg, List<String> arr) {
+		System.out.println(msg);
+		for(String v : arr) System.out.print(v + " ");
+		System.out.println();
+	}
+	static int binSearch(String[] st, int n, String key) {
+		int pl = 0;
+		int pr = n-1;
+		
+		while(pr>=pl) {
+			int pm = (pl + pr) / 2;
+			if(st[pm].compareTo(key) == 0) return pm;
+			else if(st[pm].compareTo(key) < 0) pl = pm + 1;
+			else if(st[pm].compareTo(key) > 0) pr = pm - 1;
+		}
+		return -1;
 	}
 	public static void main(String[] args) {
 		try {
@@ -50,8 +83,11 @@ public class HW3_3_MergeUncomplicatedList {
 			String s2 = new String(bytes2);
 			System.out.println("입력 스트링: s1 = " + s1);
 			System.out.println("입력 스트링: s2 = " + s2);
-			String[] sarray1 = s1.split("[,\\s]+\r\n");// 자바 regex \n으로 검색
-			String[] sarray2 = s2.split("[,\\s]+\r\n");//file에서 enter키는 \r\n으로 해야 분리됨
+//			String[] sarray1 = s1.split("[,\\s]+\r\n");
+			String[] sarray1 = s1.split("[,\\s]+\r\n");
+			String[] sarray2 = s2.split("[\\s\\p{Punct}]+");// 자바 regex \n으로 검색
+//			String[] sarray2 = s2.split("[\\s\\p{Punct}]+");//file에서 enter키는 \r\n으로 해야 분리됨
+
 			showData("스트링 배열 sarray1", sarray1);
 			showData("스트링 배열 sarray2", sarray2);
 
@@ -83,7 +119,7 @@ public class HW3_3_MergeUncomplicatedList {
 			list1 = removeDuplicate(list1);
 			list2 = removeDuplicate(list2);
 			showList("중복 제거후 리스트1: ", list1);	
-			showList("중복 제거후 리스트1: ", list1);	
+			showList("중복 제거후 리스트2: ", list2);	
 	
 	
 			List<String> list3 = new ArrayList<>();
@@ -95,7 +131,9 @@ public class HW3_3_MergeUncomplicatedList {
 			// ArrayList를 배열로 전환
 			String[] st = list3.toArray(new String[list3.size()]);
 			// binary search 구현
-			// binSearch(st, st.length, "key");
+			int index_key_st = binSearch(st, st.length, "e");
+			showData("binSearch 실행 후 인덱스 출력 (a) ::", st);
+			System.out.println("'e' index :: " + index_key_st);
 			// 정렬된 list3을 file에 출력하는 코드 완성
 			System.out.println("\n" + "file에 출력:");
 			int bufferSize = 10240;
@@ -106,7 +144,9 @@ public class HW3_3_MergeUncomplicatedList {
 			FileOutputStream file = new FileOutputStream("c.txt");
 			FileChannel channel = file.getChannel();
 			channel.write(buffer);
+			
 			file.close();
+			channel.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
