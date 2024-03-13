@@ -6,11 +6,11 @@ package datastructure.ch04;
 import java.util.Random;
 import java.util.Scanner;
 
-class Point4 {
+class Point5 {
 	private int ix;
 	private int iy;
 
-	public Point4(int x, int y) {
+	public Point5(int x, int y) {
 		ix = x;
 		iy = y;
 	}
@@ -38,92 +38,73 @@ class Point4 {
 
 	@Override
 	public boolean equals(Object p) {
-		if ((this.ix == ((Point4) p).ix) && (this.iy == ((Point4) p).iy))
+		if ((this.ix == ((Point5) p).ix) && (this.iy == ((Point5) p).iy))
 			return true;
 		else
 			return false;
 	}
 }
 
-public class HW4_2ObjectCircularQueue {
-
+class CircularQueue {
 	static int QUEUE_SIZE = 0;
-	Point4[] que;// 배열로 객체원형 큐 구현
+	Point5[] que;// 배열로 객체원형 큐 구현
 	int front, rear;
 	int num;
-	static boolean isEmpty;
+	static boolean isEmptyTag;
 
 	// --- 실행시 예외: 큐가 비어있음 ---//
 	public class EmptyQueueException extends RuntimeException {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
-
 		public EmptyQueueException() {
 		}
 	}
 
 	// --- 실행시 예외: 큐가 가득 찼음 ---//
 	public class OverflowQueueException extends RuntimeException {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
-
 		public OverflowQueueException() {
 		}
 	}
 
-	public HW4_2ObjectCircularQueue(int count) {
-		que = new Point4[count];
+	public CircularQueue(int count) {
+		que = new Point5[count];
 		QUEUE_SIZE = count;
 		front = rear = num = 0;
-		isEmpty = true;
+		isEmptyTag = true;
 	}
 
-	void push(Point4 it) throws OverflowQueueException{
-		if (num >= QUEUE_SIZE) throw new OverflowQueueException();
+	void push(Point5 it) throws OverflowQueueException {
+		if (isFull()) throw new OverflowQueueException();
 		que[rear++] = it;
 		num++;
-		if (rear == QUEUE_SIZE) rear = 0;
-		isEmpty = false;
+		if (rear == QUEUE_SIZE)
+			rear = 0;
+		isEmptyTag = false;
 	}
 
-	Point4 pop() {
-		if (num <= 0) throw new EmptyQueueException();
-		Point4 p = que[front++];
+	Point5 pop() throws EmptyQueueException {
+		if (isEmpty())
+			throw new EmptyQueueException();
+		Point5 p = que[front++];
 		num--;
 		if (front == QUEUE_SIZE) {
 			front = 0;
 		}
-		if(num == 0) isEmpty = true;
+		if (num == 0)
+			isEmptyTag = true;
 
 		return p;
 	}
 
-	void clear() {
+	void clear() throws EmptyQueueException {
+		if (isEmpty()) throw new EmptyQueueException();
 //		for (int i = 0; i < que.length; i++) {
 //			que[i] = null;
+//			
 //		}
-		num = front = rear = 0;
-		isEmpty = true;
-		System.out.println("원형 큐가 비었습니다.");
+		front = rear = num = 0;
+		isEmptyTag = true;
 	}
-
-	public void dump() {
-		if (num <= 0) System.out.println("큐가 비어있습니다.");
-		else {
-			for (int i = 0; i < num; i++) System.out.print(que[(i + front) % QUEUE_SIZE] + " ");
-			System.out.println();
-		}
-	}
-
-	public Point4 peek() throws EmptyQueueException {
-		if(num <= 0) throw new EmptyQueueException();
-		return que[front];
-	}
-	
 
 	// --- 큐의 크기를 반환 ---//
 	public int getCapacity() {
@@ -135,30 +116,53 @@ public class HW4_2ObjectCircularQueue {
 		return num;
 	}
 
-	
+	// --- 원형 큐가 비어있는가? --- 수정 필요//
+	public boolean isEmpty() {
+		return num <= 0;
+	}
+
+	// --- 원형 큐가 가득 찼는가? --- 수정 필요//
+	public boolean isFull() {
+		return num >= QUEUE_SIZE;
+	}
+
+	public void dump() throws EmptyQueueException {
+		if (isEmpty())throw new EmptyQueueException();
+		System.out.print("현재 데이터 : ");
+		for (int i = 0; i < num; i++)
+			System.out.print(que[(i + front) % QUEUE_SIZE] + " ");
+		System.out.println();
+	}
+
+	public Point5 peek() throws EmptyQueueException {
+		if (isEmpty())
+			throw new EmptyQueueException();
+		return que[front];
+	}
+}
+
+public class HW4_2ObjectCircularQueue2 {
 	public static void main(String[] args) {
 		Scanner stdIn = new Scanner(System.in);
-		HW4_2ObjectCircularQueue oq = new HW4_2ObjectCircularQueue(4); // 최대 64개를 인큐할 수 있는 큐
+		CircularQueue oq = new CircularQueue(4); // 최대 64개를 인큐할 수 있는 큐
 		Random random = new Random();
 		int rndx = 0, rndy = 0;
-		Point4 p = null;
+		Point5 p = null;
 		while (true) {
 			System.out.println(" "); // 메뉴 구분을 위한 빈 행 추가
 			System.out.printf("현재 데이터 개수: %d / %d\n", oq.size(), oq.getCapacity());
-			System.out.print("(1)인큐　(2)디큐　(3)피크　(4)덤프　(0)종료: ");
+			System.out.print("(1)인큐　(2)디큐　(3)피크　(4)덤프　(5)clear  (0)종료: ");
 			int menu = stdIn.nextInt();
 			if(menu == 0) break;
 			switch (menu) {
 			case 1: // 인큐
-
-				rndx = random.nextInt(20);
-
-				rndy = random.nextInt(20);
-				System.out.print("입력데이터: (" + rndx + ", " + rndy + ")");
-				p = new Point4(rndx, rndy);
 				try {
+					rndx = random.nextInt(20);
+					rndy = random.nextInt(20);
+					p = new Point5(rndx, rndy);
 					oq.push(p);
-				} catch (HW4_2ObjectCircularQueue.OverflowQueueException e) {
+					System.out.print("입력데이터: (" + rndx + ", " + rndy + ")");
+				} catch (CircularQueue.OverflowQueueException e) {
 					System.out.println("stack이 가득찼있습니다.");
 				}
 				break;
@@ -167,7 +171,7 @@ public class HW4_2ObjectCircularQueue {
 				try {
 					p = oq.pop();
 					System.out.println("디큐한 데이터는 " + p + "입니다.");
-				} catch (HW4_2ObjectCircularQueue.EmptyQueueException e) {
+				} catch (CircularQueue.EmptyQueueException e) {
 					System.out.println("큐가 비어 있습니다.");
 				}
 				break;
@@ -176,19 +180,31 @@ public class HW4_2ObjectCircularQueue {
 				try {
 					p = oq.peek();
 					System.out.println("피크한 데이터는 " + p + "입니다.");
-				} catch (HW4_2ObjectCircularQueue.EmptyQueueException e) {
+				} catch (CircularQueue.EmptyQueueException e) {
 					System.out.println("큐가 비어 있습니다.");
 				}
 				break;
 
 			case 4: // 덤프
-				oq.dump();
+				try {
+					oq.dump();
+				} catch (CircularQueue.EmptyQueueException e) {
+					System.out.println("큐가 비어 있습니다.");
+				}
+				break;
+			case 5: // 클리어
+				try {
+					oq.clear();
+					System.out.println("원형 큐가 비었습니다.");
+				} catch (CircularQueue.EmptyQueueException e) {
+					System.out.println("큐가 비어 있습니다.");
+				}
 				break;
 			default:
 				break;
 			}
 		}
-		System.out.println("종료되었습니다.");
 		stdIn.close();
+		System.out.println("프로그램을 종료합니다.");
 	}
 }
