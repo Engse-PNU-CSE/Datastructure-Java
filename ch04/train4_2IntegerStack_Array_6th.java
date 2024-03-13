@@ -3,82 +3,78 @@ package datastructure.ch04;
  * 교재에 있는 소스코드
  * 입력하여 실행 실습
  * 정수형 스택 소스 코드
+ * 객체스택과 큐에 대한 구현도 정수 스택의 예외처리 방식을 반복 적용함 
  */
 
 import java.util.Scanner;
 
 //int형 고정 길이 스택
 
-class IntStack {
+class IntStack4 {
 	private int[] stk; // 스택용 배열
 	private int capacity; // 스택의 크기
 	private int ptr; // 스택 포인터
 
 //--- 실행시 예외: 스택이 비어있음 ---//
 	public class EmptyIntStackException extends RuntimeException {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
-
-		public EmptyIntStackException() {
-		}
 	}
 
 //--- 실행시 예외: 스택이 가득 참 ---//
 	public class OverflowIntStackException extends RuntimeException {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
-		public OverflowIntStackException() {
-		}
+		private static final long serialVersionUID = 1L;
 	}
 
 //--- 생성자(constructor) ---//
-	public IntStack(int maxlen) {
+	public IntStack4(int maxlen) {
 		ptr = 0;
 		capacity = maxlen;
 		try {
-			stk = new int[capacity];
-		} catch (OutOfMemoryError e) {
+			stk = new int[capacity]; // 스택 본체용 배열을 생성
+		} catch (OutOfMemoryError e) { // 생성할 수 없음
 			capacity = 0;
 		}
 	}
 
 //--- 스택에 x를 푸시 ---//
-	public int push(int x) throws OverflowIntStackException {
-		if (ptr >= capacity)
-			throw new OverflowIntStackException();
-		return stk[ptr++] = x;
+	public void push(int x) throws OverflowIntStackException {
+		if (isFull()) throw new OverflowIntStackException(); // 스택이 가득 참
+		stk[ptr++] = x;
 	}
 
 //--- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
 	public int pop() throws EmptyIntStackException {
-		if (ptr <= 0)
-			throw new EmptyIntStackException();
+		if (isEmpty()) throw new EmptyIntStackException();// 스택이 빔
 		return stk[--ptr];
 	}
 
 //--- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
 	public int peek() throws EmptyIntStackException {
-		if (ptr <= 0)
-			throw new EmptyIntStackException();
-		return stk[ptr - 1];
+		if (isEmpty()) throw new EmptyIntStackException();// 스택이 빔
+		return stk[ptr-1];
 	}
 
 //--- 스택을 비움 ---//
-	public void clear() {
+
+	public void clear() throws EmptyIntStackException {
+		/*
+		 * stack을 empty로 만들어야 한다.
+		 * stack이 empty일 때 clear()가 호출된 예외 발생해야 한다 
+		 * pop()으로 구현하지 않는다
+		 */
+		if (isEmpty()) throw new EmptyIntStackException();// 스택이 빔
 		ptr = 0;
+		
+
 	}
 
 //--- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//
 	public int indexOf(int x) {
-		for (int i = ptr - 1; i >= 0; i--)
+		for (int i = ptr - 1; i >= 0; i--) // 꼭대기 쪽부터 선형 검색
 			if (stk[i] == x)
-				return i;
-		return -1;
+				return i; // 검색 성공
+		return -1; // 검색 실패
 	}
 
 //--- 스택의 크기를 반환 ---//
@@ -102,25 +98,22 @@ class IntStack {
 	}
 
 //--- 스택 안의 모든 데이터를 바닥 → 정상 순서로 표시 ---//
-	public void dump() {
-		if (ptr <= 0)
-			System.out.println("Stack is Empty");
-		else {
-			for (int s : stk)
-				System.out.print(s + " ");
-			System.out.println();
-		}
+	public void dump() throws EmptyIntStackException {
+		if (isEmpty()) throw new EmptyIntStackException();
+		for(int i = 0; i < ptr; i++) System.out.print(stk[i] + " ");
+		System.out.println();
 	}
 }
-public class train4_2IntegerStack {
+public class train4_2IntegerStack_Array_6th {
+
 	public static void main(String[] args) {
 		Scanner stdIn = new Scanner(System.in);
-		IntStack s = new IntStack(4); // 최대 64 개를 푸시할 수 있는 스택
+		IntStack4 s = new IntStack4(4); // 최대 64 개를 푸시할 수 있는 스택
 
 		while (true) {
 			System.out.println(); // 메뉴 구분을 위한 빈 행 추가
 			System.out.printf("현재 데이터 개수: %d / %d\n", s.size(), s.getCapacity());
-			System.out.print("(1)push　(2)pop　(3)peek　(4)dump　(0)종료: ");
+			System.out.print("(1)push　(2)pop　(3)peek　(4)dump　(5)clear  (0)종료: ");
 
 			int menu = stdIn.nextInt();
 			if (menu == 0)
@@ -134,8 +127,9 @@ public class train4_2IntegerStack {
 				x = stdIn.nextInt();
 				try {
 					s.push(x);
-				} catch (IntStack.OverflowIntStackException e) {
-					System.out.println("스택이 가득 찼습니다.");
+				} catch (IntStack4.OverflowIntStackException e) {
+					System.out.println("스택이 가득 찼습니다." + e.getMessage());
+					e.printStackTrace();
 				}
 				break;
 
@@ -143,8 +137,9 @@ public class train4_2IntegerStack {
 				try {
 					x = s.pop();
 					System.out.println("팝한 데이터는 " + x + "입니다.");
-				} catch (IntStack.EmptyIntStackException e) {
-					System.out.println("스택이 비어있습니다.");
+				} catch (IntStack4.EmptyIntStackException e) {
+					System.out.println("스택이 비어있습니다." + e.getMessage());
+					e.printStackTrace();
 				}
 				break;
 
@@ -152,17 +147,33 @@ public class train4_2IntegerStack {
 				try {
 					x = s.peek();
 					System.out.println("피크한 데이터는 " + x + "입니다.");
-				} catch (IntStack.EmptyIntStackException e) {
-					System.out.println("스택이 비어있습니다.");
+				} catch (IntStack4.EmptyIntStackException e) {
+					System.out.println("스택이 비어있습니다." + e.getMessage());
+					e.printStackTrace();
 				}
 				break;
 
 			case 4: // 덤프
-				s.dump();
+				try {
+					System.out.print("현재 데이터 : ");
+					s.dump();
+				} catch (IntStack4.EmptyIntStackException e) {
+					System.out.println("스택이 비어있습니다." + e.getMessage());
+					e.printStackTrace();
+				}
+				break;
+			case 5: //clear
+				try {
+					s.clear();
+					System.out.println("스택을 초기화 합니다.");
+				} catch (IntStack4.EmptyIntStackException e) {
+					System.out.println("스택이 비어있습니다." + e.getMessage());
+					e.printStackTrace();
+				}
 				break;
 			}
+			
 		}
-		System.out.println("종료되었습니다.");
 		stdIn.close();
 	}
 }

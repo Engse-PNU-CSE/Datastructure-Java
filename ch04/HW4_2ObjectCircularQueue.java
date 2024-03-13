@@ -55,12 +55,22 @@ public class HW4_2ObjectCircularQueue {
 
 	// --- 실행시 예외: 큐가 비어있음 ---//
 	public class EmptyQueueException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public EmptyQueueException() {
 		}
 	}
 
 	// --- 실행시 예외: 큐가 가득 찼음 ---//
 	public class OverflowQueueException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public OverflowQueueException() {
 		}
 	}
@@ -177,5 +187,6 @@ public class HW4_2ObjectCircularQueue {
 			}
 		}
 		System.out.println("종료되었습니다.");
+		stdIn.close();
 	}
 }

@@ -52,12 +52,14 @@ class objectStack{
 	public class EmptyGenericStackException extends Exception {
 		private static final long serialVersionUID = 1L;
 		public EmptyGenericStackException() {
-			super();
 		}
 	}
 
 	//--- 실행시 예외: 스택이 가득 참 ---//
 	public class OverflowGenericStackException extends RuntimeException {
+
+		private static final long serialVersionUID = 1L;
+
 		public OverflowGenericStackException() {
 		}
 	}
@@ -76,8 +78,8 @@ class objectStack{
 
 //--- 스택에 x를 푸시 ---//
 	public boolean push(Point2 x) throws OverflowGenericStackException {
-		//구현
-		if(top >= capacity) throw new OverflowGenericStackException();
+		//구현1
+		if(isFull()) throw new OverflowGenericStackException();
 		data.add(x);
 		top++;
 		return true;
@@ -86,7 +88,7 @@ class objectStack{
 //--- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
 	public Point2 pop() throws EmptyGenericStackException  {
 		//구현
-		if(top <= 0) throw new EmptyGenericStackException();
+		if(isEmpty()) throw new EmptyGenericStackException();
 		Point2 p = data.get(top-1);
 		data.remove(--top);
 		return p;
@@ -95,21 +97,34 @@ class objectStack{
 //--- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
 	public Point2 peek() throws EmptyGenericStackException  {
 		//구현
-		if(top <= 0) throw new EmptyGenericStackException();
+		if(isEmpty()) throw new EmptyGenericStackException();
 		return data.get(top-1);
 	}
 
 //--- 스택을 비움 ---//
-	public void clear() {
-		top = 0;
-		data.clear();
+	public void clear() throws EmptyGenericStackException {
+//		top = 0;
+//		data.clear();
+		if(isEmpty()) throw new EmptyGenericStackException();
+		while(!data.isEmpty()) data.remove(--top);
 	}
 
+//--- 스택 안의 모든 데이터를 바닥 → 꼭대기 순서로 출력 ---//
+	public void dump() throws EmptyGenericStackException {
+		//구현
+		if(isEmpty()) throw new EmptyGenericStackException();
+		System.out.print("현재 데이터 : ");
+		for(Point2 p : data) System.out.print(p + " ");
+		System.out.println();
+	}
+	
 //--- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//
 	public int indexOf(Point2 x) {
 		//구현
-		if(data.contains(x)) return data.indexOf(x);
-		return -1;
+		for (int i = top - 1; i >= 0; i--) // 꼭대기 쪽부터 선형 검색
+			if (data.get(i).equals(x))
+				return i; // 검색 성공
+		return -1; // 검색 실패
 	}
 
 //--- 스택의 크기를 반환 ---//
@@ -132,12 +147,7 @@ class objectStack{
 		return top >= capacity;
 	}
 
-//--- 스택 안의 모든 데이터를 바닥 → 꼭대기 순서로 출력 ---//
-	public void dump() {
-		//구현
-		for(Point2 p : data) System.out.print(p + " ");
-		System.out.println();
-	}
+
 }
 public class HW4_1ObjectStack {
 
@@ -150,7 +160,7 @@ public class HW4_1ObjectStack {
 		while (true) {
 			System.out.println(); // 메뉴 구분을 위한 빈 행 추가
 			System.out.printf("현재 데이터 개수: %d / %d\n", s.size(), s.getCapacity());
-			System.out.print("(1)push　(2)pop　(3)peek　(4)dump　(0)종료: ");
+			System.out.print("(1)push　(2)pop　(3)peek　(4)dump　(5)clear  (0)종료: ");
 
 			int menu = stdIn.nextInt();
 			if (menu == 0)
@@ -189,10 +199,23 @@ public class HW4_1ObjectStack {
 				break;
 
 			case 4: // 덤프
-				s.dump();
+				try {
+					s.dump();
+				} catch (objectStack.EmptyGenericStackException e) {
+					System.out.println("스택이 비어있습니다.");
+				}
+				break;
+			case 5:
+				try {
+					s.clear();
+					System.out.println("스택을 초기화 합니다.");
+				} catch (objectStack.EmptyGenericStackException e) {
+					System.out.println("스택이 비어있습니다.");
+				}
 				break;
 			}
 		}
 		System.out.println("종료합니다.");
+		stdIn.close();
 	}
 }
