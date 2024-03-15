@@ -49,13 +49,13 @@ class CircularQueue {
 	static int QUEUE_SIZE = 0;
 	Point5[] que;// 배열로 객체원형 큐 구현
 	int front, rear;
-	int num;
 	static boolean isEmptyTag;
 
 	// --- 실행시 예외: 큐가 비어있음 ---//
 	public class EmptyQueueException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 		public EmptyQueueException() {
+			super();
 		}
 	}
 
@@ -69,16 +69,14 @@ class CircularQueue {
 	public CircularQueue(int count) {
 		que = new Point5[count];
 		QUEUE_SIZE = count;
-		front = rear = num = 0;
+		front = rear = 0;
 		isEmptyTag = true;
 	}
 
 	void push(Point5 it) throws OverflowQueueException {
 		if (isFull()) throw new OverflowQueueException();
 		que[rear++] = it;
-		num++;
-		if (rear == QUEUE_SIZE)
-			rear = 0;
+		if (rear == QUEUE_SIZE) rear = 0;
 		isEmptyTag = false;
 	}
 
@@ -86,11 +84,10 @@ class CircularQueue {
 		if (isEmpty())
 			throw new EmptyQueueException();
 		Point5 p = que[front++];
-		num--;
 		if (front == QUEUE_SIZE) {
 			front = 0;
 		}
-		if (num == 0)
+		if (size() == 0)
 			isEmptyTag = true;
 
 		return p;
@@ -102,7 +99,7 @@ class CircularQueue {
 //			que[i] = null;
 //			
 //		}
-		front = rear = num = 0;
+		front = rear = 0;
 		isEmptyTag = true;
 	}
 
@@ -113,23 +110,24 @@ class CircularQueue {
 
 	// --- 큐에 쌓여 있는 데이터 개수를 반환 ---//
 	public int size() {
-		return num;
+		if(!isEmptyTag) return (front < rear) ? rear-front : rear-front+QUEUE_SIZE;
+		return 0;
 	}
 
 	// --- 원형 큐가 비어있는가? --- 수정 필요//
 	public boolean isEmpty() {
-		return num <= 0;
+		return size() <= 0;
 	}
 
 	// --- 원형 큐가 가득 찼는가? --- 수정 필요//
 	public boolean isFull() {
-		return num >= QUEUE_SIZE;
+		return size() >= QUEUE_SIZE;
 	}
 
 	public void dump() throws EmptyQueueException {
 		if (isEmpty())throw new EmptyQueueException();
 		System.out.print("현재 데이터 : ");
-		for (int i = 0; i < num; i++)
+		for (int i = 0; i < size(); i++)
 			System.out.print(que[(i + front) % QUEUE_SIZE] + " ");
 		System.out.println();
 	}
@@ -164,6 +162,7 @@ public class HW4_2ObjectCircularQueue2 {
 					System.out.print("입력데이터: (" + rndx + ", " + rndy + ")");
 				} catch (CircularQueue.OverflowQueueException e) {
 					System.out.println("stack이 가득찼있습니다.");
+					e.printStackTrace();
 				}
 				break;
 
@@ -173,6 +172,7 @@ public class HW4_2ObjectCircularQueue2 {
 					System.out.println("디큐한 데이터는 " + p + "입니다.");
 				} catch (CircularQueue.EmptyQueueException e) {
 					System.out.println("큐가 비어 있습니다.");
+					e.printStackTrace();
 				}
 				break;
 
@@ -182,6 +182,7 @@ public class HW4_2ObjectCircularQueue2 {
 					System.out.println("피크한 데이터는 " + p + "입니다.");
 				} catch (CircularQueue.EmptyQueueException e) {
 					System.out.println("큐가 비어 있습니다.");
+					e.printStackTrace();
 				}
 				break;
 
@@ -190,6 +191,7 @@ public class HW4_2ObjectCircularQueue2 {
 					oq.dump();
 				} catch (CircularQueue.EmptyQueueException e) {
 					System.out.println("큐가 비어 있습니다.");
+					e.printStackTrace();
 				}
 				break;
 			case 5: // 클리어
@@ -198,6 +200,7 @@ public class HW4_2ObjectCircularQueue2 {
 					System.out.println("원형 큐가 비었습니다.");
 				} catch (CircularQueue.EmptyQueueException e) {
 					System.out.println("큐가 비어 있습니다.");
+					e.printStackTrace();
 				}
 				break;
 			default:

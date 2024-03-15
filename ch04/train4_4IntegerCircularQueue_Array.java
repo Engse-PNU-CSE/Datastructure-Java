@@ -17,12 +17,22 @@ class IntQueue3 {
 
 //--- 실행시 예외: 큐가 비어있음 ---//
 	public class EmptyIntQueue3Exception extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public EmptyIntQueue3Exception() {
 		}
 	}
 
 //--- 실행시 예외: 큐가 가득 찼음 ---//
 	public class OverflowIntQueue3Exception extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public OverflowIntQueue3Exception() {
 		}
 	}
@@ -40,7 +50,7 @@ class IntQueue3 {
 
 //--- 큐에 데이터를 인큐 ---//
 	public int enque(int x) throws OverflowIntQueue3Exception {
-		if (num >= capacity)
+		if (isFull())
 			throw new OverflowIntQueue3Exception(); // 큐가 가득 찼음
 		que[rear++] = x;
 		num++;
@@ -51,7 +61,7 @@ class IntQueue3 {
 
 //--- 큐에서 데이터를 디큐 ---//
 	public int deque() throws EmptyIntQueue3Exception {
-		if (num <= 0)
+		if (isEmpty())
 			throw new EmptyIntQueue3Exception(); // 큐가 비어있음
 		int x = que[front++];
 		num--;
@@ -62,7 +72,7 @@ class IntQueue3 {
 
 //--- 큐에서 데이터를 피크(프런트 데이터를 들여다봄) ---//
 	public int peek() throws EmptyIntQueue3Exception {
-		if (num <= 0)
+		if (isEmpty())
 			throw new EmptyIntQueue3Exception(); // 큐가 비어있음
 		return que[front];
 	}
@@ -104,7 +114,7 @@ class IntQueue3 {
 
 //--- 큐 안의 모든 데이터를 프런트 → 리어 순으로 출력 ---//
 	public void dump() {
-		if (num <= 0)
+		if (isEmpty())
 			System.out.println("큐가 비어있습니다.");
 		else {
 			for (int i = 0; i < num; i++)
@@ -164,5 +174,6 @@ public class train4_4IntegerCircularQueue_Array {
 				break;
 			}
 		}
+		stdIn.close();
 	}
 }

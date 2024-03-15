@@ -27,9 +27,18 @@ class PhyscData2 implements Comparable<PhyscData2>{
 	}
 	@Override
 	public int compareTo(PhyscData2 p) {
-		if(name.compareTo(p.name) > 0) return 1;
-		else if(name.compareTo(p.name) < 0) return -1;
-		return 0;
+	    if (this == p) return 0;
+	    
+	    // 이름 비교
+	    int nameCompare = this.name.compareTo(p.name);
+	    if (nameCompare != 0) return nameCompare;
+
+	    // 키 비교
+	    if (this.height > p.height) return 1;
+	    else if (this.height < p.height) return -1;
+
+	    // 시력 비교
+	    return Double.compare(this.vision, p.vision);
 	}
 	public int equals(PhyscData2 p) {
 		return -1;
@@ -93,12 +102,13 @@ public class train3_6_1BinarySearchforObjectArrangement {
 		 */
 		resultIndex = binarySearch(data, key);//comparable를 사용
 		System.out.println("\nbinarySearch(<박동,182,0.6>): result = " + resultIndex);
-		key = new PhyscData2("이동", 167, 0.6);
+		key = new PhyscData2("이동", 167, 0.5);
 		/*
-		 * 교재 115 Arrays.binarySearch에 의한 검색
+		 * 교재 115 Arrays.binarySearch에 의한 검색	
+		 * 
 		 */
 		resultIndex = Arrays.binarySearch(data, key);//comparable를 사용
-		System.out.println("\nArrays.binarySearch(<이동,167,0.6>): result = " + resultIndex);
+		System.out.println("\nArrays.binarySearch(<이동,167,0.5>): result = " + resultIndex);
 	}
 	
 	
