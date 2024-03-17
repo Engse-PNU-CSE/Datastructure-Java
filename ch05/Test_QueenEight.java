@@ -1,6 +1,7 @@
 
-package datastructure.ch05;
+package Chap5_Recursive;
 //https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/?ref=lbp
+
 //N Queen problem / backtracking
 
 //모든 해가 나오는 버젼 만들기 
@@ -50,65 +51,76 @@ class Point {
 			return false;
 	}
 }
+
 class Stack3 {
-	private int[] data; // 스택용 배열
-	private int capacity; // 스택의 크기
-	private int ptr; // 스택 포인터
-
-//--- 실행시 예외: 스택이 비어있음 ---//
-	public class EmptyIntStackException extends RuntimeException {
+	public class EmptyGenericStackException extends Exception {
 		private static final long serialVersionUID = 1L;
-	}
 
-//--- 실행시 예외: 스택이 가득 참 ---//
-	public class OverflowIntStackException extends RuntimeException {
-
-		private static final long serialVersionUID = 1L;
-	}
-
-//--- 생성자(constructor) ---//
-	public Stack3(int maxlen) {
-		ptr = 0;
-		capacity = maxlen;
-		try {
-			data = new int[capacity]; // 스택 본체용 배열을 생성
-		} catch (OutOfMemoryError e) { // 생성할 수 없음
-			capacity = 0;
+		public EmptyGenericStackException() {
 		}
 	}
 
-	public void push(int x) throws OverflowIntStackException {
-		if (isFull()) throw new OverflowIntStackException(); // 스택이 가득 참
-		data[ptr++] = x;
+	public class OverflowGenericStackException extends RuntimeException {
+
+		private static final long serialVersionUID = 1L;
+
+		public OverflowGenericStackException() {
+		}
 	}
 
-	public int pop() throws EmptyIntStackException {
-		if (isEmpty()) throw new EmptyIntStackException();
-		return data[--ptr];
+	private List<Point> data;
+	private int capacity;
+	private int top;
+
+	public Stack3(int capacity) {
+		data = new ArrayList<>();
+		this.capacity = capacity;
+		top = 0;
 	}
 
-	public int peek() throws EmptyIntStackException {
-		if (isEmpty()) throw new EmptyIntStackException();
-		return data[ptr-1];
+	public boolean push(Point x) throws OverflowGenericStackException {
+		if (isFull())
+			throw new OverflowGenericStackException();
+		data.add(x);
+		top++;
+		return true;
 	}
-	
-	public void dump() throws EmptyIntStackException {
-		if (isEmpty()) throw new EmptyIntStackException();
-		for(int i = 0; i < ptr; i++) System.out.print(data[i] + " ");
+
+	public Point pop() throws EmptyGenericStackException {
+		if (isEmpty())
+			throw new EmptyGenericStackException();
+		Point p = data.get(top - 1);
+		data.remove(--top);
+		return p;
+	}
+
+	public Point peek() throws EmptyGenericStackException {
+		if (isEmpty())
+			throw new EmptyGenericStackException();
+		return data.get(top - 1);
+	}
+
+	public void clear() throws EmptyGenericStackException {
+		if (isEmpty())
+			throw new EmptyGenericStackException();
+		while (!data.isEmpty())
+			data.remove(--top);
+	}
+
+	public void dump() throws EmptyGenericStackException {
+		if (isEmpty())
+			throw new EmptyGenericStackException();
+		System.out.print("현재 데이터 : ");
+		for (Point2 p : data)
+			System.out.print(p + " ");
 		System.out.println();
 	}
 
-	public void clear() throws EmptyIntStackException {
-		if (isEmpty()) throw new EmptyIntStackException();
-		ptr = 0;
-
-	}
-
-	public int indexOf(int x) {
-		for (int i = ptr - 1; i >= 0; i--)
-			if (data[i] == x)
-				return i; 
-		return -1; 
+	public int indexOf(Point x) {
+		for (int i = top - 1; i >= 0; i--)
+			if (data.get(i).equals(x))
+				return i;
+		return -1;
 	}
 
 	public int getCapacity() {
@@ -116,72 +128,140 @@ class Stack3 {
 	}
 
 	public int size() {
-		return ptr;
+		return top;
 	}
 
 	public boolean isEmpty() {
-		return ptr <= 0;
+		return top <= 0;
 	}
 
 	public boolean isFull() {
-		return ptr >= capacity;
+		return top >= capacity;
 	}
 
-
 }
-public class Test_QueenEight {
+
+public class Backtracking_Queen2023 {
 	public static void solveQueen(int[][] d) {
-		int count = 0;//퀸 배치 갯수
+		int count = 0;// 퀸 배치 갯수
 		int ix = 0, iy = 0;// 행 ix, 열 iy
-		Stack3 st = new Stack3(100); //100개를 저장할 수 있는 스택을 만들고
-		Point p = new Point(ix, iy);//현 위치를 객체로 만들고
-		d[ix][iy] = 1;//현 위치에 queen을 넣었다는 표시를 하고
+		Stack3 st = new Stack3(100); // 100개를 저장할 수 있는 스택을 만들고
+		Point p = new Point(ix, iy);// 현 위치를 객체로 만들고
+		d[ix][iy] = 1;// 현 위치에 queen을 넣었다는 표시를 하고
 		count++;
 		st.push(p);// 스택에 현 위치 객체를 push
-		ix++;//ix는 행별로 퀸 배치되는 것을 말한다.
+		ix++;// ix는 행별로 퀸 배치되는 것을 말한다.
 		while (true) {
-			if (st.isEmpty() && ix == 8) //ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다 
+			if (st.isEmpty() && ix == 8) // ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다
 				break;
-			if ((iy = nextMove(d, ix, iy))== -1) {//다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
+			else {
+				ix = 7;
+				try {
+					Point s = st.pop();
+					ix = p.getX();
+					iy = p.getY() + 1;
+					d[ix][iy] = 0;
+					count--;
+				} catch (EmptyGenericStackException e) {
+				}
+			}
+			if ((iy = nextMove(d, ix, iy)) == -1) {// 다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
+				try {
+					Point s = st.pop();
+					ix = p.getX();
+					iy = p.getY() + 1;
+					d[ix][iy] = 0;
+					count--;
+				} catch (EmptyGenericStackException e) {
+				}
+			} else {
+				d[ix][iy] = 1; // 퀸 배치
+				Point s = new Point(ix, iy);
+				try {
+					st.push(p);
+				} catch (Exception e) {
+				}
 
+				ix++; // 다음 행으로
+				iy = 0; // 열 초기화
+				count++; // 배치된 퀸의 개수 증가
 			}
 
-			if (count == 8) { //8개를 모두 배치하면
-
+			if (count == 8) { // 8개를 모두 배치하면
+				showQueens(d);
+				d[ix][iy] = 0;
+				try {
+					st.pop();
+				} catch (EmptyGenericStackException e) {
+				}
+				ix--;
 			}
 
 		}
 
 	}
 
-	public static boolean checkRow(int[][] d, int crow) { //배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
-		return false;
+	public static boolean checkRow(int[][] d, int crow) { // 배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
+		for (int i = 0; i < 8; i++)
+			if (d[crow][i] == 1)
+				return false;
+		return true;
 	}
 
-	public static boolean checkCol(int[][] d, int ccol) {//배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
-		return false;
+	public static boolean checkCol(int[][] d, int ccol) {// 배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
+		for (int i = 0; i < 8; i++)
+			if (d[i][ccol] == 1)
+				return false;
+		return true;
 	}
-	//배열 d에서 행 cx, 열 cy에 퀸을 남서, 북동 대각선으로 배치할 수 있는지 조사
+
+	// 배열 d에서 행 cx, 열 cy에 퀸을 남서, 북동 대각선으로 배치할 수 있는지 조사
 	public static boolean checkDiagSW(int[][] d, int cx, int cy) { // x++, y-- or x--, y++ where 0<= x,y <= 7
-		return false;
+		int x = cx, y = cy;
+		while (x >= 0 && y < 8)
+			if (d[--x][++y] == 1)
+				return false;
+		x = cx;
+		y = cy;
+		while (x < 8 && y >= 0)
+			if (d[++x][--y] == 1)
+				return false;
+		return true;
 	}
 
-	//배열 d에서 행 cx, 열 cy에 퀸을 남동, 북서 대각선으로 배치할 수 있는지 조사
+	// 배열 d에서 행 cx, 열 cy에 퀸을 남동, 북서 대각선으로 배치할 수 있는지 조사
 	public static boolean checkDiagSE(int[][] d, int cx, int cy) {// x++, y++ or x--, y--
-		return false;
+		int x = cx, y = cy;
+		while (x < 8 && y < 8)
+			if (d[++x][++y] == 1)
+				return false;
+		x = cx;
+		y = cy;
+		while (x >= 0 && y >= 0)
+			if (d[--x][--y] == 1)
+				return false;
+		return true;
 	}
-	//배열 d에서 (x,y)에 퀸을 배치할 수 있는지  조사
-	public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
-		return false;
 
+	// 배열 d에서 (x,y)에 퀸을 배치할 수 있는지 조사
+	public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
+		return checkCol(d, x) && checkRow(d, y) && checkDiagSE(d, x, y) && checkDiagSW(d, x, y);
 	}
-	//배열 d에서 현재 위치(row,col)에 대하여 다음에 이동할 위치 nextCol을 반환, 이동이 가능하지 않으면 -1를 리턴
+
+	// 배열 d에서 현재 위치(row,col)에 대하여 다음에 이동할 위치 nextCol을 반환, 이동이 가능하지 않으면 -1를 리턴
 	public static int nextMove(int[][] d, int row, int col) {// 현재 row, col에 대하여 이동할 col을 return
+		for (int i = col + 1; i < 8; i++)
+			if (checkMove(d, row, i))
+				return i;
 		return -1;
 	}
-	
-	static void showQueens(int[][] data) {//배열 출력
 
+	static void showQueens(int[][] data) {// 배열 출력
+		for (int[] i : data) {
+			for (int j : i)
+				System.out.print(j + " ");
+			System.out.println();
+		}
 	}
 
 	public static void main(String[] args) {
