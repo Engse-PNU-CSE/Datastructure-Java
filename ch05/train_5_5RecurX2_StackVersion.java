@@ -5,69 +5,106 @@ package datastructure.ch05;
 import java.util.Scanner;
 
 class IntStack {
-	private int[] data; // 스택용 배열
+	private int[] stk; // 스택용 배열
 	private int capacity; // 스택의 크기
-	private int top; // 스택 포인터
+	private int ptr; // 스택 포인터
 
-	// --- 실행시 예외 : 스택이 비어있음 ---//
+//--- 실행시 예외: 스택이 비어있음 ---//
 	public class EmptyIntStackException extends RuntimeException {
-
+		/**
+		 * 
+		 */
 		private static final long serialVersionUID = 1L;
 
 		public EmptyIntStackException() {
 		}
 	}
 
-	// --- 실행시 예외 : 스택이 가득 참 ---//
+//--- 실행시 예외: 스택이 가득 참 ---//
 	public class OverflowIntStackException extends RuntimeException {
-
+		/**
+		 * 
+		 */
 		private static final long serialVersionUID = 1L;
 
 		public OverflowIntStackException() {
 		}
 	}
 
-	// --- 생성자(constructor) ---//
+//--- 생성자(constructor) ---//
 	public IntStack(int maxlen) {
-		top = 0;
+		ptr = 0;
 		capacity = maxlen;
 		try {
-			data = new int[capacity]; // 스택 본체용 배열을 생성
-		} catch (OutOfMemoryError e) { // 생성할 수 없음
+			stk = new int[capacity];
+		} catch (OutOfMemoryError e) {
 			capacity = 0;
 		}
 	}
 
-	
-	// --- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
-	public int peek() throws EmptyIntStackException {
-		if (top <= 0) // 스택이 빔
+//--- 스택에 x를 푸시 ---//
+	public int push(int x) throws OverflowIntStackException {
+		if (ptr >= capacity)
+			throw new OverflowIntStackException();
+		return stk[ptr++] = x;
+	}
+
+//--- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
+	public int pop() throws EmptyIntStackException {
+		if (ptr <= 0)
 			throw new EmptyIntStackException();
-		return data[top - 1];
+		return stk[--ptr];
 	}
 
-	// --- 스택을 비움 ---//
+//--- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
+	public int peek() throws EmptyIntStackException {
+		if (ptr <= 0)
+			throw new EmptyIntStackException();
+		return stk[ptr - 1];
+	}
+
+//--- 스택을 비움 ---//
 	public void clear() {
-		top = 0;
+		ptr = 0;
 	}
 
-	// --- 스택에서 x를 찾아 인덱스(벌견하지 못하면 –1)를 반환 ---//
+//--- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//
 	public int indexOf(int x) {
-		for (int i = top - 1; i >= 0; i--) // 정상 쪽에서 선형검색
-			if (data[i] == x)
-				return i; // 검색 성공
-		return -1; // 검색 실패
+		for (int i = ptr - 1; i >= 0; i--)
+			if (stk[i] == x)
+				return i;
+		return -1;
 	}
 
-	// --- 스택의 크기를 반환 ---//
+//--- 스택의 크기를 반환 ---//
 	public int getCapacity() {
 		return capacity;
 	}
 
-	
-	// --- 스택 안의 모든 데이터를 바닥 → 정상 순서로 표시 ---//
-	public void dump() {
+//--- 스택에 쌓여있는 데이터 갯수를 반환 ---//
+	public int size() {
+		return ptr;
+	}
 
+//--- 스택이 비어있는가? ---//
+	public boolean isEmpty() {
+		return ptr <= 0;
+	}
+
+//--- 스택이 가득 찼는가? ---//
+	public boolean isFull() {
+		return ptr >= capacity;
+	}
+
+//--- 스택 안의 모든 데이터를 바닥 → 정상 순서로 표시 ---//
+	public void dump() {
+		if (ptr <= 0)
+			System.out.println("Stack is Empty");
+		else {
+			for (int s : stk)
+				System.out.print(s + " ");
+			System.out.println();
+		}
 	}
 }
 public class train_5_5RecurX2_StackVersion {
@@ -76,7 +113,17 @@ public class train_5_5RecurX2_StackVersion {
 		IntStack s = new IntStack(n);
 
 		while (true) {
-			
+			if(n > 0) {
+				s.push(n--);
+				continue;
+			}
+			if(!s.isEmpty()) {
+				n = s.pop();
+				System.out.println(n);
+				n -= 2;
+				continue;
+			}
+			break;
 		}
 	}
 
