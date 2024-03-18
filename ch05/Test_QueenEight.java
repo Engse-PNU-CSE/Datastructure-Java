@@ -171,6 +171,29 @@ public class Test_QueenEight {
 		st.push(p);// 스택에 현 위치 객체를 push
 		while (true) {
 			if(st.isEmpty() && ix ==8) break;
+			if(count == 8) {
+				showQueens(d);
+				p = st.pop();
+				ix = p.getX(); iy = p.getY();
+				d[ix][iy]=0;
+				count--;
+				numberSolutions++;
+			}
+			if(iy == -1) {
+				p = st.pop();
+				ix = p.getX(); iy = p.getY();
+				d[ix][iy] = 0;
+				count--;
+			}
+			iy = nextMove(d, ix+1, iy);
+			if(iy != -1) {
+				ix++;
+				p = new Point(ix, iy);
+				d[ix][iy] = 1;
+				st.push(p);
+				count++;
+			}
+			
 		}
 		System.out.printf("총 해의 갯수 :  %d개\n", numberSolutions);
 	}
