@@ -147,30 +147,39 @@ public class Test_MazingProblem {
 			Items3 temp = new Items3(0, 0, 0);//N :: 0
 			temp.x = 1;
 			temp.y = 1;
-			temp.dir = 2;//E:: 2
+			temp.dir = 0;//E:: 2
 			mark[temp.x][temp.y] = 2;//미로 찾기 궤적은 2로 표시
 			st.push(temp);
-
-			while (!st.isEmpty()) // stack not empty
-			{
-				Items3 tmp = st.pop(); // unstack
-				int i = tmp.x;
-				int j = tmp.y;
-				int d = tmp.dir;
-				mark[i][j] = 1;//backtracking 궤적은 1로 표시
-				while (d < 8) // moves forward
-				{
-
-					if ((g == ix) && (h == iy)) { // reached exit
-													// output path
-
-					}
-					if ((maze[g][h] == 0) && (mark[g][h] == 0)) { // new position
-
-
-					} else {}
-
+			int i = temp.x;
+			int j = temp.y;
+			int d = temp.dir;
+			while (!st.isEmpty()) {
+				if(d == 8) {
+					temp = st.pop();
+					i = temp.x;
+					j = temp.y;
+					d = 0;
+					maze[i][j]=0;
+					mark[i][j]=0;
 				}
+				maze[i][j]=1;
+				mark[i][j]=2;
+				int g = i + moves[d].a;
+				int h = j + moves[d].b;
+				if(g == ix && h == iy) return;
+				if(maze[g][h]==1) {
+					g -= moves[d].a;
+					h -= moves[d].b;
+					d++;
+				}
+				else {
+					temp = new Items3(g, h, d);
+					st.push(temp);
+					i = temp.x;
+					j = temp.y;
+					d = 0;
+				}
+				
 			}
 			System.out.println("no path in maze ");
 		}
@@ -225,10 +234,13 @@ public class Test_MazingProblem {
 		// d = d + 1;//java는 지원안됨
 		for (int i = 0; i < 14; i++) {
 			for (int j = 0; j < 17; j++) {
-
+				if(i == 0 || j == 0 || i == 13 || j == 16) maze[i][j]=1;
+				else maze[i][j]=input[i-1][j-1];
+				mark[i][j]=0;
 				// input[][]을 maze[][]로 변환
 			}
 		}
+		
 		System.out.println("maze[12,15]::");
 		showMatrix(maze, 13, 16);
 

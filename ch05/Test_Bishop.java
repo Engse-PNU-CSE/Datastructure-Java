@@ -4,25 +4,22 @@ package datastructure.ch05;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
-import datastructure.ch05.Stack4.EmptyGenericStackException;
-
-//https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/?ref=lbp
-//N Queen problem / backtracking
+//https://www.geeksforgeeks.org/n-Bishop-problem-backtracking-3/?ref=lbp
+//N Bishop problem / backtracking
 //모든 해가 나오는 버젼 만들기 
 /*
- * 체스판은 8 x 8 체스의 기물: king/가로세로대각선 1칸만 이동, queen/가로세로 대각선/같은 편의 기물을 넘을 수 없다,
+ * 체스판은 8 x 8 체스의 기물: king/가로세로대각선 1칸만 이동, Bishop/가로세로 대각선/같은 편의 기물을 넘을 수 없다,
  * Rook/가로,세로 이동/다른 기물을 넘을 수없다, bishop/대각선, knight/1-2칸 이동/다른 기물을 넘을 수 있다,
  * pawn/처음 이동은 2칸까지 가능, 그 후 한칸만 가능, 잡을 때는 대각선 가능 체스판 최대 배치 문제 : king/16,
- * Queen/8, rook/8, bishop/?, knight/? rook 2개/a, h, knight 2개/b, g, bishop
- * 2개/c, f, queen 1개/black queen은 black 칸에, 폰 8개
+ * Bishop/8, rook/8, bishop/?, knight/? rook 2개/a, h, knight 2개/b, g, bishop
+ * 2개/c, f, Bishop 1개/black Bishop은 black 칸에, 폰 8개
  */
-class Point {
+class Point2 {
 	private int ix;
 	private int iy;
 
-	public Point(int x, int y) {
+	public Point2(int x, int y) {
 		ix = x;
 		iy = y;
 	}
@@ -50,14 +47,14 @@ class Point {
 
 	@Override
 	public boolean equals(Object p) {
-		if ((this.ix == ((Point) p).ix) && (this.iy == ((Point) p).iy))
+		if ((this.ix == ((Point2) p).ix) && (this.iy == ((Point2) p).iy))
 			return true;
 		else
 			return false;
 	}
 }
 
-class Stack4 {
+class Stack12 {
 	// --- 실행시 예외: 스택이 비어있음 ---//
 	// generic class는 Throwable을 상속받을 수 없다 - 지원하지 않는다
 	public class EmptyGenericStackException extends Exception {
@@ -80,20 +77,20 @@ class Stack4 {
 		}
 	}
 
-	private List<Point> data; // 스택용 배열
+	private List<Point2> data; // 스택용 배열
 	// private List<T> data;
 	private int capacity; // 스택의 크기
 	private int top; // 스택 포인터
 
 	// --- 생성자(constructor) ---//
-	public Stack4(int capacity) {
+	public Stack12(int capacity) {
 		data = new ArrayList<>();
 		this.capacity = capacity;
 		top = 0;
 	}
 
 	// --- 스택에 x를 푸시 ---//
-	public boolean push(Point x) throws OverflowGenericStackException {
+	public boolean push(Point2 x) throws OverflowGenericStackException {
 		if (isFull())
 			throw new OverflowGenericStackException("Stack is Full!");
 		data.add(x);
@@ -102,16 +99,16 @@ class Stack4 {
 	}
 
 	// --- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
-	public Point pop() throws EmptyGenericStackException {
+	public Point2 pop() throws EmptyGenericStackException {
 		if (isEmpty())
 			throw new EmptyGenericStackException("Stack is Empty!");
-		Point p = data.get(top - 1);
+		Point2 p = data.get(top - 1);
 		data.remove(--top);
 		return p;
 	}
 
 	// --- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
-	public Point peek() throws EmptyGenericStackException {
+	public Point2 peek() throws EmptyGenericStackException {
 		if (isEmpty())
 			throw new EmptyGenericStackException("Stack is Empty!");
 		return data.get(top - 1);
@@ -123,7 +120,7 @@ class Stack4 {
 	}
 
 	// --- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//
-	public int indexOf(Point x) {
+	public int indexOf(Point2 x) {
 		for (int i = top - 1; i >= 0; i--) // 꼭대기 쪽부터 선형 검색
 			if (data.get(i).equals(x))
 				return i; // 검색 성공
@@ -162,20 +159,20 @@ class Stack4 {
 	}
 }
 
-public class Test_QueenEight {
-	public static void EightQueen(int[][] d) {
+public class Test_Bishop {
+	public static void EightBishop(int[][] d) {
 		int count = 0;// 퀸 배치 갯수
 		int numberSolutions = 0;
 		int ix = 0, iy = 0;// 행 ix, 열 iy
-		Stack4 st = new Stack4(100); // 100개를 저장할 수 있는 스택을 만들고
-		Point p = new Point(ix, iy);// 현 위치를 객체로 만들고
+		Stack12 st = new Stack12(100); // 100개를 저장할 수 있는 스택을 만들고
+		Point2 p = new Point2(ix, iy);// 현 위치를 객체로 만들고
 //		st.push(p);// 스택에 현 위치 객체를 push
 		while (true) {
 			if (count == 8) {
-				showQueens(d);
+				showBishops(d);
 				try {
 					p = st.pop();
-				} catch (EmptyGenericStackException e) {
+				} catch (Stack12.EmptyGenericStackException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -188,7 +185,7 @@ public class Test_QueenEight {
 			}
 			iy = nextMove(d, ix, iy);
 			if (iy != -1) {
-				p = new Point(ix, iy);
+				p = new Point2(ix, iy);
 				st.push(p);
 				d[ix][iy] = 1;
 				ix++;
@@ -201,7 +198,7 @@ public class Test_QueenEight {
 				else {
 					try {
 						p = st.pop();
-					} catch (EmptyGenericStackException e) {
+					} catch (Stack12.EmptyGenericStackException e) {
 					}
 					ix--;
 					iy = p.getY();
@@ -212,20 +209,6 @@ public class Test_QueenEight {
 			}
 		}
 		System.out.printf("총 해의 갯수 :  %d개\n", numberSolutions);
-	}
-
-	public static boolean checkRow(int[][] d, int crow) { // 배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
-		for (int i = 0; i < 8; i++)
-			if (d[crow][i] == 1)
-				return false;
-		return true;
-	}
-
-	public static boolean checkCol(int[][] d, int ccol) {// 배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
-		for (int i = 0; i < 8; i++)
-			if (d[i][ccol] == 1)
-				return false;
-		return true;
 	}
 
 	// 배열 d에서 행 cx, 열 cy에 퀸을 남서, 북동 대각선으로 배치할 수 있는지 조사
@@ -271,7 +254,7 @@ public class Test_QueenEight {
 
 	// 배열 d에서 (x,y)에 퀸을 배치할 수 있는지 조사
 	public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
-		return checkCol(d, y) && checkRow(d, x) && checkDiagSE(d, x, y) && checkDiagSW(d, x, y);
+		return checkDiagSE(d, x, y) && checkDiagSW(d, x, y);
 	}
 
 	// 배열 d에서 현재 위치(row,col)에 대하여 다음에 이동할 위치 nextCol을 반환, 이동이 가능하지 않으면 -1를 리턴
@@ -282,8 +265,8 @@ public class Test_QueenEight {
 		return -1;
 	}
 
-	static void showQueens(int[][] data) {// 배열 출력
-		System.out.println("::::::::::퀸의 배치:::::::::::::");
+	static void showBishops(int[][] data) {// 배열 출력
+		System.out.println("::::::::::비숍 배치:::::::::::::");
 		for (int[] i : data) {
 			for (int j : i)
 				System.out.print(j + " ");
@@ -299,7 +282,7 @@ public class Test_QueenEight {
 			for (int j = 0; j < col; j++)
 				data[i][j] = 0;
 
-		EightQueen(data);
+		EightBishop(data);
 
 	}
 }
