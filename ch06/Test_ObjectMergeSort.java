@@ -10,8 +10,7 @@ class PhyscData implements Comparable<PhyscData> {
 
 	@Override
 	public int compareTo(PhyscData o) {
-		// TODO Auto-generated method stub
-		return 0;
+		return -this.name.compareTo(o.name);
 	}
 
 	public PhyscData(String name, int height, double vision) {
@@ -26,6 +25,24 @@ class PhyscData implements Comparable<PhyscData> {
 public class Test_ObjectMergeSort {
 	// --- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
 	static void merge(PhyscData[] a, int lefta, int righta, int leftb, int rightb) {
+		PhyscData temp[] = new PhyscData[a.length];
+		int ix = 0;
+		int p = lefta, q = leftb;
+		while (p <= righta && q <= rightb) {
+			if (a[p].compareTo(a[q]) > 0)
+				temp[ix++] = a[p++];
+			else if (a[p].compareTo(a[q]) < 0)
+				temp[ix++] = a[q++];
+			else {
+				temp[ix++] = a[p++];
+				temp[ix++] = a[q++];
+			}
+		}
+		while (p > righta && q <= rightb)
+			temp[ix++] = a[q++];
+		while (q > rightb && p <= righta)
+			temp[ix++] = a[p++];
+		for (int i = 0; i < ix; i++) a[lefta + i] = temp[i];
 	}
 
 	// --- 퀵 정렬(비재귀 버전)---//

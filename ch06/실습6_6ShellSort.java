@@ -1,4 +1,4 @@
-package Chap6_Sorting;
+package datastructure.ch06;
 
 import java.util.Random;
 
@@ -48,8 +48,7 @@ class 실습6_6ShellSort {
      shellSort(x, nx);            // 배열 x를 셸정렬
      System.out.println("정렬후:");
      showData(x);
-  
-
+     stdIn.close();
  
  }
 }

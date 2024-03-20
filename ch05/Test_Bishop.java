@@ -168,6 +168,10 @@ public class Test_Bishop {
 		Point2 p = new Point2(ix, iy);// 현 위치를 객체로 만들고
 //		st.push(p);// 스택에 현 위치 객체를 push
 		while (true) {
+			if(iy == 8) {
+				ix++;
+				iy=0;
+			}
 			if (count == 8) {
 				showBishops(d);
 				try {
@@ -176,7 +180,7 @@ public class Test_Bishop {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				ix--;
+				ix = p.getX();
 				iy = p.getY();
 				d[ix][iy] = 0;
 				iy++;
@@ -188,8 +192,7 @@ public class Test_Bishop {
 				p = new Point2(ix, iy);
 				st.push(p);
 				d[ix][iy] = 1;
-				ix++;
-				iy = 0;
+				iy++;
 				count++;
 			} else {
 				if(st.isEmpty()) {
@@ -200,7 +203,7 @@ public class Test_Bishop {
 						p = st.pop();
 					} catch (Stack12.EmptyGenericStackException e) {
 					}
-					ix--;
+					ix = p.getX();
 					iy = p.getY();
 					d[ix][iy] = 0;
 					iy++;
@@ -235,7 +238,7 @@ public class Test_Bishop {
 	// 배열 d에서 행 cx, 열 cy에 퀸을 남동, 북서 대각선으로 배치할 수 있는지 조사
 	public static boolean checkDiagSE(int[][] d, int cx, int cy) {// x++, y++ or x--, y--
 		int x = cx, y = cy;
-		while (x >= 0 && y < 8) {
+		while (x >= 0 && y < 14) {
 			if (d[x][y] == 1)
 				return false;
 			x--;
@@ -243,7 +246,7 @@ public class Test_Bishop {
 		}
 		x = cx;
 		y = cy;
-		while (x < 8 && y >= 0) {
+		while (x < 14 && y >= 0) {
 			if (d[x][y] == 1)
 				return false;
 			x++;

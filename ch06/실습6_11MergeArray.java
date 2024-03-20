@@ -1,4 +1,4 @@
-package Chap6_Sorting;
+package datastructure.ch06;
 
 //정렬을 완료한 배열의 병합
 
@@ -45,6 +45,7 @@ class 실습6_11MergeArray {
      System.out.println();
      System.out.println("배열 c: ");
      showData(c);
+     stdIn.close();
     
  }
 }

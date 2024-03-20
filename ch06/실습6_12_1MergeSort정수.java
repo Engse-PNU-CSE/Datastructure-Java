@@ -1,4 +1,4 @@
-package Chap6_Sorting;
+package datastructure.ch06;
 
 public class 실습6_12_1MergeSort정수 {
 
@@ -12,7 +12,7 @@ public class 실습6_12_1MergeSort정수 {
 			if (a[p] < a[q]) temp[ix++] = a[p++];
 			else if (a[p] > a[q]) temp[ix++] = a[q++];
 			else {
-				temp[ix++] = a[p++];temp[ix++] = a[q++];
+				temp[ix++] = a[p++]; temp[ix++] = a[q++];
 			}
 		}
 		while (p > righta && q <= rightb) temp[ix++] = a[q++];
@@ -40,7 +40,7 @@ public class 실습6_12_1MergeSort정수 {
 		int[] x = new int[20];
 		for (int ix = 0; ix < 20; ix++) {
 			double d = Math.random();
-			x[ix] = (int) (d * 50);
+			x[ix] = (int) (d * 3);
 		}
 		for (int i = 0; i < nx; i++)
 			System.out.print(" " + x[i]);

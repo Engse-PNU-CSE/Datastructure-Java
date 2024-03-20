@@ -1,4 +1,4 @@
-package Chap6_Sorting;
+package datastructure.ch06;
 
 class 실습6_9QuickSort {
 	static int count = 0;

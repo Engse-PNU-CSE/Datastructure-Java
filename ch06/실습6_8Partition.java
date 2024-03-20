@@ -1,4 +1,4 @@
-package Chap6_Sorting;
+package datastructure.ch06;
 
 //배열을 나눔
 
@@ -71,5 +71,6 @@ public class 실습6_8Partition {
     	 System.out.print(" " + n);
      System.out.println();
      partition(x, nx);                // 배열 x를 나눔
+     stdIn.close();
  }
 }

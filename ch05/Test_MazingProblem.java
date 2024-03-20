@@ -154,22 +154,23 @@ public class Test_MazingProblem {
 			int j = temp.y;
 			int d = temp.dir;
 			while (!st.isEmpty()) {
-				System.out.println("mark:::::::::::");
-				showMatrix(mark, 13, 16);
-				System.out.println(":::::::::::::::");
 				if(d == 8) {
 					temp = st.pop();
+					maze[i][j]=0;
+					mark[i][j]=0;
 					i = temp.x;
 					j = temp.y;
 					d = 0;
-					maze[i][j]=0;
-					mark[i][j]=0;
+				}
+				if(i == ix && j == iy) {
+					st.dump();
+					return;
 				}
 				maze[i][j]=1;
 				mark[i][j]=2;
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
-				if(g == ix && h == iy) return;
+
 				if(maze[g][h]==1) {
 					g -= moves[d].a;
 					h -= moves[d].b;
@@ -251,7 +252,9 @@ public class Test_MazingProblem {
 		showMatrix(mark, 13, 16);
 
 		path(maze, mark, 12, 15);
+		System.out.println("maze[12,15]::");
+		showMatrix(maze, 13, 16);
 		System.out.println("mark::");
-		showMatrix(mark, 12, 15);
+		showMatrix(mark, 13, 16);
 	}
 }

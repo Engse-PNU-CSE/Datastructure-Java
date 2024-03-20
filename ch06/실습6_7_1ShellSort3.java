@@ -1,4 +1,4 @@
-package Chap6_Sorting;
+package datastructure.ch06;
 
 //셸정렬(버전 2 : h = …, 40, 13, 4, 1)
 //비교 횟수 출력한다 
@@ -54,6 +54,6 @@ public class 실습6_7_1ShellSort3 {
 
 		System.out.println("오름차순으로 정렬했습니다.");
 		showData(x);
-
+		stdIn.close();
 	}
 }
