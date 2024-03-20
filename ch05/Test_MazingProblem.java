@@ -130,8 +130,7 @@ class StackList {
 			System.out.println("스택이 비어있습니다.");
 		else {
 			for (int i = 0; i < top; i++)
-				System.out.print(data.get(i) + " ");
-			System.out.println();
+				System.out.println((i+1) + ": " + data.get(i) + " ");
 		}
 	}
 }
@@ -154,37 +153,35 @@ public class Test_MazingProblem {
 			int j = temp.y;
 			int d = temp.dir;
 			while (!st.isEmpty()) {
-				if(d == 8) {
-					temp = st.pop();
-					maze[i][j]=0;
-					mark[i][j]=0;
-					i = temp.x;
-					j = temp.y;
-					d = 0;
-				}
-				if(i == ix && j == iy) {
+				if (i == ix && j == iy) {
 					st.dump();
 					return;
 				}
-				maze[i][j]=1;
-				mark[i][j]=2;
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
-
-				if(maze[g][h]==1) {
-					g -= moves[d].a;
-					h -= moves[d].b;
-					d++;
-				}
-				else {
-					temp = new Items3(g, h, d);
-					st.push(temp);
-					i = temp.x;
-					j = temp.y;
-					d = 0;
-				}
 				
+				if (maze[g][h] == 0) {
+					mark[i][j] = 2;
+					maze[i][j] = 1;
+					st.push(new Items3(i, j, d));
+					i = g;
+					j = h;
+					d = 0;
+				} else {
+					d++;
+					if (d == 8) {
+						mark[i][j] = 0;
+						maze[i][j] = 1;
+						temp = st.pop();
+						if (!st.isEmpty()) {
+							i = temp.x;
+							j = temp.y;
+							d = temp.dir + 1;
+						}
+					}
+				}
 			}
+			
 			System.out.println("no path in maze ");
 		}
 
