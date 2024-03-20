@@ -160,7 +160,7 @@ public class Test_MazingProblem {
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
 				
-				if (maze[g][h] == 0) {
+				if (maze[g][h] == 0 && mark[g][h] == 0) {
 					mark[i][j] = 2;
 					maze[i][j] = 1;
 					st.push(new Items3(i, j, d));
@@ -170,10 +170,10 @@ public class Test_MazingProblem {
 				} else {
 					d++;
 					if (d == 8) {
-						mark[i][j] = 0;
-						maze[i][j] = 1;
-						temp = st.pop();
+						mark[i][j] = 1;
+						maze[i][j] = 0;
 						if (!st.isEmpty()) {
+							temp = st.pop();
 							i = temp.x;
 							j = temp.y;
 							d = temp.dir + 1;
