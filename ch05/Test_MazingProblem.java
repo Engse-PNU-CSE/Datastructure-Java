@@ -154,6 +154,9 @@ public class Test_MazingProblem {
 			int j = temp.y;
 			int d = temp.dir;
 			while (!st.isEmpty()) {
+				System.out.println("mark:::::::::::");
+				showMatrix(mark, 13, 16);
+				System.out.println(":::::::::::::::");
 				if(d == 8) {
 					temp = st.pop();
 					i = temp.x;
