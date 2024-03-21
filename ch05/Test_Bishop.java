@@ -4,7 +4,6 @@ package datastructure.ch05;
 import java.util.ArrayList;
 import java.util.List;
 
-
 //https://www.geeksforgeeks.org/n-Bishop-problem-backtracking-3/?ref=lbp
 //N Bishop problem / backtracking
 //모든 해가 나오는 버젼 만들기 
@@ -166,14 +165,19 @@ public class Test_Bishop {
 		int ix = 0, iy = 0;// 행 ix, 열 iy
 		Stack12 st = new Stack12(100); // 100개를 저장할 수 있는 스택을 만들고
 		Point2 p = new Point2(ix, iy);// 현 위치를 객체로 만들고
-//		st.push(p);// 스택에 현 위치 객체를 push
+		// st.push(p);// 스택에 현 위치 객체를 push
 		while (true) {
-			if(iy == 8) {
+			
+			if (iy == 8) {
 				ix++;
-				iy=0;
+				iy = 0;
 			}
-			if (count == 8) {
-				showBishops(d);
+			if (ix == 8) {
+				if (count == 14) {
+					showBishops(d);
+
+					numberSolutions++;
+				}
 				try {
 					p = st.pop();
 				} catch (Stack12.EmptyGenericStackException e) {
@@ -185,7 +189,6 @@ public class Test_Bishop {
 				d[ix][iy] = 0;
 				iy++;
 				count--;
-				numberSolutions++;
 			}
 			iy = nextMove(d, ix, iy);
 			if (iy != -1) {
@@ -195,10 +198,9 @@ public class Test_Bishop {
 				iy++;
 				count++;
 			} else {
-				if(st.isEmpty()) {
+				if (st.isEmpty()) {
 					break;
-				}
-				else {
+				} else {
 					try {
 						p = st.pop();
 					} catch (Stack12.EmptyGenericStackException e) {
