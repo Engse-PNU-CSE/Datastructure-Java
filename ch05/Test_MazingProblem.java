@@ -167,7 +167,8 @@ public class Test_MazingProblem {
 					i = g;
 					j = h;
 					d = 0;
-				} else {
+				}
+				else {
 					d++;
 					if (d == 8) {
 						mark[i][j] = 1;
