@@ -1,6 +1,6 @@
 package datastructure.ch06;
 
-import java.util.DuplicateFormatFlagsException;
+import java.text.DecimalFormat;
 
 class Polynomial implements Comparable<Polynomial> {
 	double coef; // 계수
@@ -8,7 +8,7 @@ class Polynomial implements Comparable<Polynomial> {
 
 	@Override
 	public int compareTo(Polynomial o) {
-//		if(this.exp == o.exp) return (int)(this.coef-o.coef);
+		if(this.exp == o.exp) return (int)(this.coef-o.coef);
 		return this.exp - o.exp;
 	}
 
@@ -125,7 +125,7 @@ public class Test_PolynomialExpressionMergeCalculation {
 		}
 	}
 	public static void main(String[] args) {
-		Polynomial[] x = {new Polynomial(1.5, 3), new Polynomial(1.5, 3),new Polynomial(1.5, 3), new Polynomial(2.5, 7), new Polynomial(3.3, 2),
+		Polynomial[] x = {new Polynomial(1.6, 3), new Polynomial(1.5, 3),new Polynomial(1.5, 3), new Polynomial(2.5, 7), new Polynomial(3.3, 2),
 				new Polynomial(4.0, 1), new Polynomial(2.2, 0), new Polynomial(3.1, 4), new Polynomial(3.8, 5), };
 		Polynomial[] y = { new Polynomial(1.5, 1), new Polynomial(2.5, 2), new Polynomial(3.3, 3),
 				new Polynomial(4.0, 0), new Polynomial(2.2, 4), new Polynomial(3.1, 5), new Polynomial(3.8, 6), };
@@ -133,11 +133,11 @@ public class Test_PolynomialExpressionMergeCalculation {
 		ShowPolynomial("X", x);
 		ShowPolynomial("Y", y);
 		MergeSort(x, 0, x.length - 1); // 배열 x를 퀵정렬
+		ShowPolynomial("Sorted before remove dupliced X",x);
 		removeDuplicatedExp(x);
 		MergeSort(y, 0, y.length - 1); // 배열 x를 퀵정렬
 		removeDuplicatedExp(y);
 		ShowPolynomial("Sorted X",x);
-		ShowPolynomial("add same exp", x);
 		ShowPolynomial("Sotred Y",y);
 		Polynomial[] z1 = new Polynomial[nx + ny];
 		AddPolynomial(x, y, z1);// 다항식 덧셈 z = x + y
@@ -148,6 +148,7 @@ public class Test_PolynomialExpressionMergeCalculation {
 		removeDuplicatedExp(z2);
 		ShowPolynomial("Z = X * Y",z2);
 		double result = EvaluatePolynomial(z2, 10);// 다항식 값 계산 함수 z(10) 값 계산한다
-		System.out.println(" result = " + result);
+		DecimalFormat toDecimal = new DecimalFormat("#,###");
+		System.out.println("result = " + toDecimal.format(result));
 	}
 }
