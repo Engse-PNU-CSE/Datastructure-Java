@@ -415,7 +415,7 @@ class Tree {
 		}
 	}
 	boolean delete(int num) {// 난이도 최상급
-		TreeNode current_node = root, q = null, parent_node = null;
+		TreeNode current_node = root, parent_node = null;
 		int branchMode = 0; // 1은 left, 2는 right
 		while(current_node!=null) {
 			if(current_node.data == num) {

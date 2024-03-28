@@ -474,10 +474,10 @@ public class Chap9_Test_ObjectBinaryTree {
 	public static void main(String[] args) {
 		Tree4 t = new Tree4();
 		Menu menu; // 메뉴
-		String sno1, sname1;
+//		String sno1, sname1;
 		SimpleObject4 so;
-		int count = 0;
-		int num;
+//		int count = 0;
+//		int num;
 		boolean result;
 		do {
 			switch (menu = SelectMenu()) {
@@ -528,6 +528,8 @@ public class Chap9_Test_ObjectBinaryTree {
 			case PostorderPrint://postfix로 출력
 				t.postorder();
 				System.out.println();
+				break;
+			default:
 				break;
 			}
 		} while (menu != Menu.Exit);
