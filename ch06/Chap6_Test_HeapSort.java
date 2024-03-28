@@ -31,12 +31,25 @@ class Heap implements MaxHeap {
 	}
 	@Override
 	public void Insert(int x) {
+//		if (n == MaxSize) { 
+//			HeapFull();
+//			return;
+//		}
+//		heap[++n] = x;
+//		makeHeap();
+		int i;
 		if (n == MaxSize) { 
 			HeapFull();
-			return;
+			return; 
 		}
-		heap[++n] = x;
-		makeHeap();
+		n++;
+		for (i = n; i >= 1; i/=2) {
+			if (i == 1) break; // at root
+			if (x <= heap[i / 2]) break;
+			// move from parent to i
+			heap[i] = heap[i / 2];
+		}
+		heap[i] = x;
 	}
 	private void downHeap(int parent) {
 	    int tmp = heap[parent];
@@ -94,8 +107,6 @@ public class Chap6_Test_HeapSort {
 		int select = 0;
 		Scanner stdIn = new Scanner(System.in);
 		Heap heap = new Heap(20);
-	    final int count = 10;
-	    int[] x = new int[count+1];
 
 		do {
 			System.out.println("Max Tree. Select: 1 insert, 2 display, 3 deleteMax, 4 sort, 5 exit => ");
