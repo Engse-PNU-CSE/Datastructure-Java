@@ -12,7 +12,7 @@ import java.util.Scanner;
 class SimpleObject5 {
 	static final int NO = 1;
 	static final int NAME = 2;
-	String no; // 회원번호
+	int no; // 회원번호
 	String name; // 이름
 	static final Scanner sc = new Scanner(System.in);
 
@@ -23,7 +23,7 @@ class SimpleObject5 {
 	}
 
 	public SimpleObject5() {
-		no = null;
+		no = -1;
 		name = null;
 	}
 
@@ -33,7 +33,7 @@ class SimpleObject5 {
 
 		if ((sw & NO) == NO) { // & 는 bit 연산자임
 			System.out.print("번호: ");
-			no = sc.next();
+			no = sc.nextInt();
 		}
 		if ((sw & NAME) == NAME) {
 			System.out.print("이름: ");
@@ -47,7 +47,7 @@ class SimpleObject5 {
 	private static class NoOrderComparator implements Comparator<SimpleObject5> {
 		@Override
 		public int compare(SimpleObject5 d1, SimpleObject5 d2) {
-			return (d1.no.compareTo(d2.no) > 0) ? 1 : (d1.no.compareTo(d2.no) < 0) ? -1 : 0;
+			return (d1.no > d2.no) ? 1 : (d1.no < d2.no) ? -1 : 0;
 		}
 	}
 
@@ -71,8 +71,10 @@ class ChainHash5 {
 		private SimpleObject5 data; // 키값
 		private Node2 next; // 뒤쪽 포인터(뒤쪽 노드에 대한 참조)
 		// --- 생성자(constructor) ---//
-
-		
+		public Node2(SimpleObject5 data) {
+			this.data = data;
+			next = null;
+		}
 	}
 
 	private int size; // 해시 테이블의 크기
@@ -80,29 +82,103 @@ class ChainHash5 {
 
 //--- 생성자(constructor) ---//
 	public ChainHash5(int capacity) {
-		
+		if(capacity < 0) {
+			capacity = 0;
+		}
+		size = capacity;
+		table = new Node2[size];
+	}
+	
+	public int getIndex(SimpleObject5 st) {
+		return st.no * st.no % size;
 	}
 
 //--- 키값이 key인 요소를 검색(데이터를 반환) ---//
 	public boolean search(SimpleObject5 st, Comparator<? super SimpleObject5> c) {
+		int search_index = getIndex(st);
+		Node2 current_node = table[search_index];
+		while(current_node != null) {
+			if(c.compare(st, current_node.data) == 0) {
+				System.out.println("Find Data : " + current_node.data.toString());
+				return true;
+			}
+			current_node = current_node.next;
+		}
 		return false;
-		
 	}
 
 //--- 키값이 key인 데이터를 data의 요소로 추가 ---//
 	public boolean add(SimpleObject5 st, Comparator<? super SimpleObject5> c) {
-		return false;
-		
+		int search_index = getIndex(st);
+		if(table[search_index] == null) {
+			table[search_index] = new Node2(st);
+			return true;
+		}
+		else if(c.compare(st, table[search_index].data) < 0) {
+			Node2 tmp = new Node2(st);
+			tmp.next = table[search_index];
+			table[search_index] = tmp;
+			return true;
+		}
+		Node2 current_node = table[search_index], past_node = null;
+		while(current_node != null) {
+			if(c.compare(current_node.data, st) == 0) {
+				System.out.println("Duplicated Data : " + st.toString());
+				return false;
+			}
+			else if(c.compare(current_node.data, st) > 0) {
+				Node2 tmp = new Node2(st);
+				past_node.next = tmp;
+				tmp.next = current_node;
+				return true;
+			}
+			past_node = current_node;
+			current_node = current_node.next;
+		}
+		past_node.next = new Node2(st);
+		return true;
 	}
 
 //--- 키값이 key인 요소를 삭제 ---//
 	public boolean delete(SimpleObject5 st, Comparator<? super SimpleObject5> c) {
+		int search_index = getIndex(st);
+		if(table[search_index] == null) {
+			return false;
+		}
+		else if(c.compare(st, table[search_index].data) == 0) {
+			System.out.println("Deleted data : " + table[search_index].data.toString());
+			table[search_index] = table[search_index].next;
+			return true;
+		}
+		Node2 current_node = table[search_index], past_node = null;
+		while(current_node != null) {
+			if(c.compare(current_node.data, st) == 0) {
+				System.out.println("Deleted data : " + st.toString());
+				past_node.next = current_node.next;
+				current_node.next = null;
+				return true;
+			}
+			past_node = current_node;
+			current_node = current_node.next;
+		}
 		return false;
 	}
 
 //--- 해시 테이블을 덤프(dump) ---//
 	public void dump() {
-		
+		for(int i = 0; i < size; i++) {
+			System.out.printf("Index %d : ", i);
+			Node2 bucket = table[i];
+			if(bucket == null) {
+				 System.out.println();
+				 continue;
+			 }
+			 while(bucket.next != null) {
+				System.out.print(bucket.data.toString() + " -> ");
+				bucket = bucket.next;
+			 }
+			 System.out.println(bucket.data.toString());
+		}
 	}
 }
 

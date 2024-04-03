@@ -1,4 +1,4 @@
-package Chap10_Hashing;
+package datastructure.ch10;
 
 import java.util.Comparator;
 import java.util.Scanner;
@@ -8,8 +8,13 @@ import java.util.Scanner;
 class SimpleObject2 {
 	static final int NO = 1;
 	static final int NAME = 2;
+	public static Comparator<? super SimpleObject2> NO_ORDER;
 	String sno; // 회원번호
 	String sname; // 이름
+	public void scanData(String string, int i) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 }
@@ -49,21 +54,25 @@ class OpenHash {
 
 	// --- 키값 key를 갖는 버킷 검색 ---//
 	private Bucket searchNode(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
+		return null;
 		
 	}
 
 	// --- 키값이 key인 요소를 검색(데이터를 반환)---//
 	public SimpleObject2 search(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
+		return key;
 		
 	}
 
 	// --- 키값이 key인 데이터를 data의 요소로 추가 ---//
 	public int add(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
+		return size;
 		
 	}
 
 	// --- 키값이 key인 요소를 삭제 ---//
 	public int remove(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
+		return size;
 		
 	}
 
@@ -73,7 +82,7 @@ class OpenHash {
 	}
 }
 //*/
-public class 객체오픈해시 {
+public class Test_실습10_4객체오픈해시 {
 
 	static Scanner stdIn = new Scanner(System.in);
 

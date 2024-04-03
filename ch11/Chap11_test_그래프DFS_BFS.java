@@ -18,15 +18,46 @@ class ListNode {
 }
 
 class List {
+
+	ListNode first;
+
 	public List() {
 		first = null;
 	}
-	ListNode first;
-	void Insert(int k) {//같은 값을 체크하지 않아 중복 입력됨
+
+	void Insert(int k) {// 같은 값을 체크하지 않아 중복 입력됨
 		// 구현할 부분
+		if (first == null) {
+			first = new ListNode(k);
+			return;
+		}
+		ListNode currentNode = first;
+		while (currentNode.link != null) {
+			currentNode = currentNode.link;
+		}
+		currentNode.link = new ListNode(k);
 	}
+
 	void Delete(int k) {
 		// 구현할 부분
+		if (first == null) {
+			System.out.println("List is cleared");
+			return;
+		}
+		ListNode currentNode = first;
+		if (first.data == k) {
+			first = currentNode.link;
+			currentNode.link = null;
+		}
+		ListNode pastNode = null;
+		while (currentNode != null) {
+			if (currentNode.data == k)
+				break;
+			pastNode = currentNode;
+			currentNode = currentNode.link;
+		}
+		pastNode.link = currentNode.link;
+		currentNode.link = null;
 	}
 }
 
@@ -67,7 +98,6 @@ class ListIterator {
 			return false;
 	}
 
-
 }
 
 class QueueNode {
@@ -100,22 +130,42 @@ class Queue {
 
 	void Insert(int y) {
 		// 구현할 부분
+		QueueNode insertedData = new QueueNode(y, null);
+
+		if (IsEmpty()) {
+			front = rear = insertedData;
+			return;
+		}
+		rear.link = insertedData;
+		rear = insertedData;
 	}
 
 	int Delete() {
-		return 0;
-	// 구현할 부분
+		if (IsEmpty()) {
+	        System.out.println("Queue is empty");
+	        return -1;
+	    }
+	    int deleteData = front.data;
+	    if (front == rear) {
+	        front = rear = null;
+	    } else {
+	        front = front.link;
+	    }
+	    return deleteData;
+		// 구현할 부분
 	}
 }
+
 class StackNode {
 	ListNode data;
 	StackNode link;
 
-	StackNode(ListNode data, StackNode link) {
+	StackNode(ListNode data) {
 		this.data = data;
-		this.link = link;
+		link = null;
 	}
 }
+
 class Stack {
 	private StackNode top;
 
@@ -136,16 +186,28 @@ class Stack {
 
 	void Insert(ListNode y) {
 		// 구현할 부분
+		StackNode insertData = new StackNode(y);
+		if (IsEmpty()) {
+			top = insertData;
+			return;
+		}
+		insertData.link = top;
+		top = insertData;
 	}
 
 	ListNode Delete()
 	// delete the top node in stack and return its data
+	
 	{
-		return null;
+		ListNode deleteNode = top.data;
+		top = top.link;
+		return deleteNode;
 		// 구현할 부분
 	}
+	ListNode Peek() {
+		return top.data;
+	}
 }
-
 
 class Graph {
 	private List[] HeadNodes;
@@ -160,12 +222,23 @@ class Graph {
 			HeadNodes[i] = new List();
 			visited[i] = false;
 		}
-		
+
 	}
 
 	void displayAdjacencyLists() {
 		for (int i = 0; i < n; i++) {
 			// 구현할 부분
+			System.out.printf("%d linked to : ", i);
+			ListNode li = HeadNodes[i].first;
+			if (li == null) {
+				System.out.println();
+				continue;
+			}
+			while (li.link != null) {
+				System.out.print(li.data + " -> ");
+				li = li.link;
+			}
+			System.out.println(li.data);
 		}
 	}
 
@@ -176,14 +249,36 @@ class Graph {
 		}
 
 		// 구현할 부분
+		HeadNodes[start].Insert(end);
+		HeadNodes[end].Insert(start);
+//		while(CurrentList != null) {
+//		}
 	}
 
 	void BFS(int v) {
-		boolean[] visited = new boolean[n]; // visited is declared as a Boolean 
+		boolean[] visited = new boolean[n]; // visited is declared as a Boolean
 		for (int i = 0; i < n; i++)
 			visited[i] = false; // initially, no vertices have been visited
 		// 구현할 부분
+		Queue route = new Queue();
+		route.Insert(v);
+		visited[v] = true;
+		while(!route.IsEmpty()) {
+			int n = route.Delete();
+			System.out.printf("%d -> ", n);
+			List leaf = HeadNodes[n];
+			ListNode currentleaf_node = leaf.first;
+			while(currentleaf_node != null) {
+				if(!visited[currentleaf_node.data]) {
+					visited[currentleaf_node.data] = true;
+					route.Insert(currentleaf_node.data);
+				}
+				currentleaf_node = currentleaf_node.link;
+			}
+		}
+		
 	}
+
 	void ShowList(List l) {
 		ListIterator li = new ListIterator(l);
 		// 구현할 부분
@@ -191,10 +286,8 @@ class Graph {
 
 	// Driver
 	void DFS(int v) {
-		for (int i = 0; i < n; i++)
-			visited[i] = false; // initially, no vertices have been visited
-
-		//_DFS(v); // start search at vertex 0
+		for (int i = 0; i < n; i++) visited[i] = false; // initially, no vertices have been visited
+		 //_DFS(v); // start search at vertex 0, its not used stack
 		_NonRecursiveDFS(v);
 
 	}
@@ -218,19 +311,47 @@ class Graph {
 				return;
 		}
 	}
+
 	// Workhorse 2
-		void _NonRecursiveDFS(int v)
-		// visit all previously unvisited vertices that are reachable from vertex v
-		{
-			// 구현할 부분
-			
+	void _NonRecursiveDFS(int v)
+	// visit all previously unvisited vertices that are reachable from vertex v
+	{
+		// 구현할 부분
+		Stack route = new Stack();
+		route.Insert(new ListNode(v));
+		visited[v] = true;
+		
+		while(!route.IsEmpty()) {
+			System.out.printf("%d -> ", route.Peek().data);
+			List leaf = HeadNodes[route.Peek().data];
+			ListNode currentleaf_node = leaf.first;
+			while(currentleaf_node != null) {
+				if(!visited[currentleaf_node.data]) {
+					visited[currentleaf_node.data] = true;
+					route.Insert(currentleaf_node);
+					break;
+				}
+				currentleaf_node = currentleaf_node.link;
+			}
+			if(currentleaf_node == null) {
+				route.Delete();
+			}
 		}
+		System.out.println();
+	}
+
+	public void InsertVertex(int startEdge, int endEdge, int weight) {
+		// TODO Auto-generated method stub
+
+	}
 }
+
 public class Chap11_test_그래프DFS_BFS {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int select = 10, n, startEdge = -1, endEdge = -1;
-		int startBFSNode = 100;// the start node to BFS
+		int startBFSNode = 0;// the start node to BFS
+		int inputdata[][] = {{0, 1}, {0, 2}, {0, 3}, {1, 4}, {2, 4}, {3, 4}};
 
 		System.out.println("vertex 숫자 입력: ");
 
@@ -243,20 +364,23 @@ public class Chap11_test_그래프DFS_BFS {
 			select = sc.nextInt();
 			switch (select) {
 			case 1:
-				System.out.println("edge 추가: from vertext: ");
-				startEdge = sc.nextInt();
-				System.out.println("to vertex: ");
-				endEdge = sc.nextInt();
-				if (startEdge < 0 || startEdge >= n || endEdge < 0 || endEdge >= n) {
-					System.out.println("the input node is out of bound.");
-					break;
+//				System.out.println("edge 추가: from vertext: ");
+//				startEdge = sc.nextInt();
+//				System.out.println("to vertex: ");
+//				endEdge = sc.nextInt();
+//				if (startEdge < 0 || startEdge >= n || endEdge < 0 || endEdge >= n) {
+//					System.out.println("the input node is out of bound.");
+//					break;
+//				}
+//				// get smallest start node.
+//				if (startEdge < startBFSNode)
+//					startBFSNode = startEdge;
+//				if (endEdge < startBFSNode)
+//					startBFSNode = endEdge;
+//				g.InsertVertex(startEdge, endEdge);
+				for(int i = 0; i < inputdata.length; i++) {
+					g.InsertVertex(inputdata[i][0], inputdata[i][1]);
 				}
-				// get smallest start node.
-				if (startEdge < startBFSNode)
-					startBFSNode = startEdge;
-				if (endEdge < startBFSNode)
-					startBFSNode = endEdge;
-				g.InsertVertex(startEdge, endEdge);
 				break;
 			case 2:
 				// display

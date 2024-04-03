@@ -31,7 +31,7 @@ class Sets {
 	}
 
 	int CollapsingFind(int i)
-	// Find the root of the tree containing element i.
+	// Find the root of the tree containing element i.2
 	// Use the collapsing rule to collapse all nodes from @i@ to the root
 	{
 		return i;

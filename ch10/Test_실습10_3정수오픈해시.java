@@ -30,8 +30,10 @@ class OpenHash2 {
 
 //--- 해시값을 구함 ---//
 	public int hashValue(int key) {
-		return hashCode() % size;
+		return Integer.hashCode(key) % size;
+		
 	}
+
 
 //--- 재해시값을 구함 ---//
 	public int rehashValue(int hash) {
