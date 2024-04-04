@@ -291,7 +291,24 @@ class Graph {
 		_NonRecursiveDFS(v);
 
 	}
-
+	void _BFS(int v)
+	// visit all previously unvisited vertices that are reachable from vertex v
+	{
+		visited[v] = true;
+		System.out.println(v + ", ");
+		ListIterator li = new ListIterator(HeadNodes[v]);
+		if (!li.NotNull())
+			return;
+		int w = li.First();
+		while (true) {
+			if (!visited[w])
+				_DFS(w);
+			if (li.NotNull())
+				w = li.Next();
+			else
+				return;
+		}
+	}
 	// Workhorse
 	void _DFS(int v)
 	// visit all previously unvisited vertices that are reachable from vertex v
